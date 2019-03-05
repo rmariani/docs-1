@@ -157,6 +157,7 @@
 <li><code>webpack.config.js</code> needed for the webpack to work</li>
 <li><code>index.js</code> that imports <code>fluence</code> js library and shows how to connect to a cluster</li>
 </ul>
+<p><code>fluence</code> js library is an SDK, that can take cluster entry points from Ethereum smart contract with <code>connect</code> method and invoke commands to a cluster by method <code>invoke</code>.</p>
 <p>Let's take a look at <code>index.js</code>:</p>
 <pre><code class="language-javascript">
 // address of the Fluence smart contract on Ethereum.
@@ -187,8 +188,8 @@ function send() {
   });
 }
 </code></pre>
-<p>This code queries the Fluence smart contract for IP addresses of Tendermint nodes hosting the app with specified <code>appId</code>, creates an <code>AppSession</code> from these connections, and saves it to <code>window.session</code>, so it can be used later. All this is done via <code>connect</code> method.</p>
-<p>Then, it assigns <code>send()</code> function as a callback for clicking the button, which will call an <code>invoke</code> method provided by <code>AppSession</code>. <code>invoke</code> takes a <code>String</code>, and sends it to the backend as a transaction. Result will be displayed in <code>greeting</code> label.</p>
+<p>This code creates a session, and saves it to <code>window.session</code>, so it can be used later.</p>
+<p>Then, it assigns <code>send()</code> function on the button, which will call the <code>invoke</code> method. <code>invoke</code> takes a string from an input, and sends it to the backend as a transaction. The result will be displayed in a greeting label.</p>
 <a class="header" href="#running-and-using" id="running-and-using"><h2>Running and using</h2></a>
 <p>Please make sure you have changed <code>appId</code> to the appId of existing backend. If you haven't published your backend yet, please take a look at <a href="publish.html">Publishing guide</a>. You can also use backends published by other people, take a look at</p>
 <p>To install all dependencies, compile and run the application, run in the terminal:</p>
