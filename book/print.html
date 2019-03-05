@@ -452,7 +452,10 @@ fluence = { version = &quot;0.0.11&quot;}
 <p><strong>We will use existing Ethereum &amp; Swarm nodes, but if you wish, you can <a href="quickstart/../roles/miner.html">use your own nodes</a> or any other.</strong></p>
 <a class="header" href="#registering-an-ethereum-rinkeby-account" id="registering-an-ethereum-rinkeby-account"><h2>Registering an Ethereum Rinkeby account</h2></a>
 <a class="header" href="#via-myetherwalletcom" id="via-myetherwalletcom"><h3>Via myetherwallet.com</h3></a>
-<p>Go to <a href="https://vintage.myetherwallet.com/">MyEtherWallet.com</a>, then select any Rinkeby in the upper right, enter any password, and download the Keystore file.</p>
+<p>Go to <a href="https://vintage.myetherwallet.com/">MyEtherWallet.com</a>, then select any Rinkeby in the upper right, enter any password, and download the Keystore file. You will find your account address in last part of the keystore filename, e.g:</p>
+<pre>
+UTC--2019-03-03T14-48-59.325Z--<b>e1f9c157b45838ca83cb51b7bdcc6c7a3e56650f</b>
+</pre>
 <a class="header" href="#top-up-account-with-funds" id="top-up-account-with-funds"><h3>Top up account with funds</h3></a>
 <p>There are two main Rinkeby faucets. <a href="https://faucet.rinkeby.io/">This one</a> will give you up to 18 Ether, but it requires you to post an Ethereum address to a social network, <a href="http://rinkeby-faucet.com/">another one</a> gives you ETH right away, but just <code>0.001</code>  ether.</p>
 <p><code>0.001</code> ether is enough for the sake of this tutorial, so you may want to go with the <a href="http://rinkeby-faucet.com/">easier one</a></p>
@@ -461,10 +464,10 @@ fluence = { version = &quot;0.0.11&quot;}
 <p>You can download Fluence CLI from the <a href="https://github.com/fluencelabs/fluence/releases/">latest release</a></p>
 <p>Or in terminal:</p>
 <p><strong>Linux</strong></p>
-<pre><code class="language-bash">~ $ curl -L https://github.com/fluencelabs/fluence/releases/download/v0.1.4/fluence-cli-0.1.4-linux-x64 -o fluence
+<pre><code class="language-bash">~ $ curl -L https://github.com/fluencelabs/fluence/releases/download/v0.1.5/fluence-cli-0.1.5-linux-x64 -o fluence
 </code></pre>
 <p><strong>macOS</strong></p>
-<pre><code class="language-bash">~ $ curl -L https://github.com/fluencelabs/fluence/releases/download/v0.1.4/fluence-cli-0.1.4-mac-x64 -o fluence
+<pre><code class="language-bash">~ $ curl -L https://github.com/fluencelabs/fluence/releases/download/v0.1.5/fluence-cli-0.1.5-mac-x64 -o fluence
 
 </code></pre>
 <p>And finally don't forget to add permission to execute it:</p>
@@ -472,40 +475,28 @@ fluence = { version = &quot;0.0.11&quot;}
 
 # check CLI is working
 ~ $ ./fluence --version
-Fluence CLI 0.1.4
+Fluence CLI 0.1.5
 </code></pre>
 <p>If you see CLI version, proceed to the next step.</p>
 <a class="header" href="#publishing-via-fluence-cli" id="publishing-via-fluence-cli"><h2>Publishing via Fluence CLI</h2></a>
 <p>As was mentioned before, you will need a connection to Ethereum Rinkeby network, and a connection to Swarm network.</p>
 <p>For your convenience, and to make this guide simple, we use addresses of existing Ethereum Rinkeby and Swarm nodes running in a cloud on Fluence nodes. <strong>However, this is a centralized way to connect to Ethereum Rinkeby and Swarm networks, and shouldn't be used in production or in a security-sensitive context.</strong> You may use <strong>any</strong> Rinkeby and Swarm nodes by providing their URIs within <code>--eth_url</code> and <code>--swarm_url</code> options (see below).</p>
 <p>Also you will need a Rinkeby account with some money on it (you can <a href="https://faucet.rinkeby.io/">get money from faucet</a>) and it's private key. Private key can be either a hex string or a <a href="quickstart/../cli/README.html#keystore-json-file">JSON keystore file</a>.</p>
+<p>To interact with Fluence CLI, first of all, we will need to setup CLI to avoid input same arguments in all commands.</p>
+<pre><code class="language-bash">~ $ ./fluence setup
+</code></pre>
+<p>This command will ask you to enter Fluence contract address, Swarm and Ethereum node addresses, account credentials. It will create a config file, that will be used in all future commands.
+By default, our Swarm and Ethereum node addresses will be used.
+Note that you need only secret key OR keystore path and password to have correct credentials and able to sign transactions to Ethereum.
+There is more info on using keystore files with Fluence CLI in its <a href="quickstart/../cli/README.html#keystore-json-file">README</a>.</p>
 <p>Having all that, you're now ready to publish your app. Examples below will specify a cluster size of 4 nodes for your app. Adjust it to your needs.</p>
-<p>If you have your private key <strong>in hex</strong>, run the following in your terminal, replacing <code>&lt;&gt;</code> with actual values:</p>
 <pre><code class="language-bash">~ $ ./fluence publish \
-            --eth_url          http://207.154.232.92:8545 \
-            --swarm_url        http://207.154.232.92:8500 \
             --code_path        ~/hello-world/target/wasm32-unknown-unknown/release/hello_world.wasm \
             --gas_price        10 \
-            --account          &lt;your ethereum address&gt; \
-            --secret_key       &lt;your ethereum private key&gt; \
             --cluster_size     4 \
             --wait_syncing \
             --wait
 </code></pre>
-<p>If you have a JSON <strong>keystore file</strong>, run the following in your terminal, replacing <code>&lt;&gt;</code> with actual values:</p>
-<pre><code class="language-bash">~ $ ./fluence publish \
-            --eth_url          http://207.154.232.92:8545 \
-            --swarm_url        http://207.154.232.92:8500 \
-            --code_path        ~/hello-world/target/wasm32-unknown-unknown/release/hello_world.wasm \
-            --gas_price        10 \
-            --account          &lt;your ethereum address&gt; \
-            --keystore         &lt;path to keystore&gt; \
-            --password         &lt;password for keystore&gt; \
-            --cluster_size     4 \
-            --wait_syncing \
-            --wait
-</code></pre>
-<p>There is more info on using keystore files with Fluence CLI in its <a href="quickstart/../cli/README.html#keystore-json-file">README</a>.</p>
 <p>After running the command, you will see an output similar to the following:</p>
 <pre><code class="language-bash">[1/3]   Application code uploaded. ---&gt; [00:00:00]
 swarm hash: 0xf5c604478031e9a658551220da3af1f086965b257e7375bbb005e0458c805874
@@ -519,7 +510,6 @@ App deployed.
 <a class="header" href="#check-app-in-the-smart-contract" id="check-app-in-the-smart-contract"><h2>Check app in the smart contract</h2></a>
 <p>To see how smart contract sees your app, and what nodes it was deployed onto, you can use <code>status</code> like this:</p>
 <pre><code class="language-bash">~ $ ./fluence status \
-            --eth_url          http://207.154.232.92:8545 \
             --app_id           &lt;your app id here&gt;
 </code></pre>
 <p>The output will be in JSON, and look similar to the following:</p>
@@ -564,7 +554,6 @@ App deployed.
 </code></pre>
 <p>You can also use interactive mode instead of default by supplying <code>--interactive</code> flag:</p>
 <pre><code class="language-bash">./fluence status \
-            --eth_url          http://207.154.232.92:8545 \
             --app_id           &lt;your app id here&gt; \
             --interactive
 </code></pre>
@@ -588,6 +577,7 @@ App deployed.
 <li><code>webpack.config.js</code> needed for the webpack to work</li>
 <li><code>index.js</code> that imports <code>fluence</code> js library and shows how to connect to a cluster</li>
 </ul>
+<p><code>fluence</code> js library is an SDK, that can take cluster entry points from Ethereum smart contract with <code>connect</code> method and invoke commands to a cluster by method <code>invoke</code>.</p>
 <p>Let's take a look at <code>index.js</code>:</p>
 <pre><code class="language-javascript">
 // address of the Fluence smart contract on Ethereum.
@@ -618,8 +608,8 @@ function send() {
   });
 }
 </code></pre>
-<p>This code queries the Fluence smart contract for IP addresses of Tendermint nodes hosting the app with specified <code>appId</code>, creates an <code>AppSession</code> from these connections, and saves it to <code>window.session</code>, so it can be used later. All this is done via <code>connect</code> method.</p>
-<p>Then, it assigns <code>send()</code> function as a callback for clicking the button, which will call an <code>invoke</code> method provided by <code>AppSession</code>. <code>invoke</code> takes a <code>String</code>, and sends it to the backend as a transaction. Result will be displayed in <code>greeting</code> label.</p>
+<p>This code creates a session, and saves it to <code>window.session</code>, so it can be used later.</p>
+<p>Then, it assigns <code>send()</code> function on the button, which will call the <code>invoke</code> method. <code>invoke</code> takes a string from an input, and sends it to the backend as a transaction. The result will be displayed in a greeting label.</p>
 <a class="header" href="#running-and-using" id="running-and-using"><h2>Running and using</h2></a>
 <p>Please make sure you have changed <code>appId</code> to the appId of existing backend. If you haven't published your backend yet, please take a look at <a href="quickstart/publish.html">Publishing guide</a>. You can also use backends published by other people, take a look at</p>
 <p>To install all dependencies, compile and run the application, run in the terminal:</p>
@@ -1265,7 +1255,7 @@ env.user = &quot;root&quot;
 <a class="header" href="#fluence-cli" id="fluence-cli"><h2>Fluence CLI</h2></a>
 <p>Fluence CLI is an automation tool for tasks of app management (deployment and deletion), computation resource sharing (node registration), and monitoring Fluence network state (status). See usage for more info.</p>
 <a class="header" href="#requirements" id="requirements"><h2>Requirements</h2></a>
-<p>CLI assumes running Ethereum and Swarm on <code>http://localhost:8545/</code> and <code>http://localhost:8500/</code> respectively. Use <code>--eth_url</code> and <code>--swarm_url</code> to specify actual addresses as you need.</p>
+<p>CLI assumes running Ethereum and Swarm on <code>http://data.fluence.one:8545/</code> and <code>http://data.fluence:8500/</code> respectively. Use <code>--eth_url</code> and <code>--swarm_url</code> to specify actual addresses as you need.</p>
 <p>Please note, that your Ethereum account should have sufficient funds for issuing transactions to smart-contract. It's only for transaction fees, Fluence itself doesn't currently charge miners or developers. That could change in the future, for example when miners' deposits are implemented.</p>
 <p>Also, take a look at <a href="../tools/deploy/README.html">deployment scripts</a>, they will assist you in running Swarm, Ethereum and Fluence nodes.</p>
 <a class="header" href="#installation" id="installation"><h2>Installation</h2></a>
@@ -1280,6 +1270,21 @@ env.user = &quot;root&quot;
 <p>To look at all possible arguments and options use <code>./fluence --help</code>:</p>
 <p>You can use <code>./fluence [SUBCOMMAND] --help</code> to learn how to use commands.</p>
 <a class="header" href="#usage-examples" id="usage-examples"><h2>Usage examples</h2></a>
+<a class="header" href="#setup-cli" id="setup-cli"><h3>Setup CLI</h3></a>
+<p>Use <code>setup</code> command to enter main arguments into a config file. It will allow not to use common arguments in every command.</p>
+<pre><code class="language-bash">./fluence setup
+</code></pre>
+<p>Contract address, Ethereum, and Swarm node addresses have defaults, but account address and credentials (secret key or Ethereum keystore and password) should be filled for correct transaction sending.
+Arguments description and examples:</p>
+<ul>
+<li><code>0x074a79f29c613f4f7035cec582d0f7e4d3cda2e7</code> is a contract address, register transaction will be sent there</li>
+<li><code>http://data.fluence.one:8545</code> is an URL to Ethereum node</li>
+<li><code>http://data.fluence.one:8500</code> is an URL to Swarm node</li>
+<li><code>0x4180fc65d613ba7e1a385181a219f1dbfe7bf11d</code> will be used as Ethereum account for issuing transactions. <em>Use your Ethereum account here</em></li>
+<li><code>0xcb0799337df06a6c73881bab91304a68199a430ccd4bc378e37e51fd1b118133</code> denotes an Ethereum private key, used for offline transaction signing. <em>Use your Ethereum private key here</em></li>
+<li>it is possible to use keystore file and password instead of secret key</li>
+</ul>
+<p>All arguments could be overridden by flags in commands.</p>
 <a class="header" href="#register-a-node" id="register-a-node"><h3>Register a node</h3></a>
 <p>To provide your computation resources to Fluence network, you need to register your computer within smart-contract. The simplest way to do that is through CLI.
 The following command will register a node:</p>
@@ -1287,9 +1292,7 @@ The following command will register a node:</p>
             --node_ip               85.82.118.4 \
             --tendermint_key        1GVDICzgrw1qahPfSbwCfYw0zrw91OMZ46QoKvJMjjM= \
             --tendermint_node_id    5e4eedba85fda7451356a03caffb0716e599679b \            
-            --account               0x4180fc65d613ba7e1a385181a219f1dbfe7bf11d \
             --base64_tendermint_key \
-            --secret_key            0xcb0799337df06a6c73881bab91304a68199a430ccd4bc378e37e51fd1b118133 \
             --wait_syncing \
             --api_port              25000 \
             --capacity              10
@@ -1305,13 +1308,6 @@ The following command will register a node:</p>
 </ul>
 </li>
 <li>Tendermint p2p node ID <code>5e4eedba85fda7451356a03caffb0716e599679b</code> is needed to securely connect nodes in Tendermint cluster</li>
-<li><code>0x9995882876ae612bfd829498ccd73dd962ec950a</code> is a contract address, register transaction will be sent there</li>
-<li><code>0x4180fc65d613ba7e1a385181a219f1dbfe7bf11d</code> will be used as Ethereum account for issuing transactions. <em>Use your Ethereum account here</em></li>
-<li><code>--secret_key 0xcb0799337df06a6c73881bab91304a68199a430ccd4bc378e37e51fd1b118133</code> denotes an Ethereum private key, used for offline transaction signing. <em>Use your Ethereum private key here</em>
-<ul>
-<li>using <code>--password</code> is possible instead of private key, but private key is preferred</li>
-</ul>
-</li>
 <li><code>--wait_syncing</code> so CLI waits until Ethereum node is fully synced</li>
 <li><code>--api_port 25000</code> specifies the main port of the Fluence node, so other nodes and users know where to connect</li>
 <li><code>--capacity 10</code> limits number of apps that could be run on the node by 10</li>
@@ -1320,10 +1316,8 @@ The following command will register a node:</p>
 <p>To deploy your app on Fluence network, you must upload it to Swarm and publish hash to smart-contract. The simplest way to achieve that is to use CLI command <code>publish</code>.</p>
 <p>The following command will publish app <code>counter.wasm</code>.</p>
 <pre><code>./fluence publish \
-            --code_path        fluence/vm/examples/counter/target/wasm32-unknown-unknown/release/deps/counter.wasm \            
-            --account          0x4180fc65d613ba7e1a385181a219f1dbfe7bf11d \
+            --code_path        fluence/vm/examples/counter/target/wasm32-unknown-unknown/release/deps/counter.wasm \                        
             --cluster_size     4 \
-            --secret_key       0xcb0799337df06a6c73881bab91304a68199a430ccd4bc378e37e51fd1b118133 \
             --pin_to           1GVDICzgrw1qahPfSbwCfYw0zrw91OMZ46QoKvJMjjM= \
             --base64
 </code></pre>
@@ -1367,11 +1361,9 @@ App enqueued.
 </code></pre>
 <a class="header" href="#delete-an-app" id="delete-an-app"><h3>Delete an app</h3></a>
 <p>If you want to delete your app from smart contract, you can use <code>delete_app</code> command.</p>
-<p>The following will delete app with id <code>0x0000000000000000000000000000000000000000000000000000000000000002</code>. App id could be retrieved either from status (see below) or from smart-contract.</p>
-<pre><code>./fluence delete_app \            
-            --account          0x4180fc65d613ba7e1a385181a219f1dbfe7bf11d \
-            --app_id           0x0000000000000000000000000000000000000000000000000000000000000002 \
-            --secret_key       4d5db4107d237df6a3d58ee5f70ae63d73d7658d4026f2eefd2f204c81682cb7 \
+<p>The following will delete app with id <code>2</code>. App id could be retrieved either from status (see below) or from smart-contract.</p>
+<pre><code>./fluence delete_app \
+            --app_id           2 \
             --deployed
 </code></pre>
 <p>Note <code>--deployed</code> at the end. It means that app is deployed and cluster hosting it should be deleted as well. Without that flag, app would be removed only if there is no assigned cluster (i.e., app is not yet deployed).</p>
@@ -1384,7 +1376,7 @@ App enqueued.
 <pre><code class="language-json">{
   &quot;apps&quot;: [
     {
-      &quot;app_id&quot;: &quot;0x0000000000000000000000000000000000000000000000000000000000000001&quot;,
+      &quot;app_id&quot;: &quot;1&quot;,
       &quot;storage_hash&quot;: &quot;0xeb2a623210c080d0702cc520b790151861601c46d90179a6e8efe6bda8ac5477&quot;,
       &quot;storage_receipt&quot;: &quot;0x0000000000000000000000000000000000000000000000000000000000000000&quot;,
       &quot;cluster_size&quot;: 5,
@@ -1393,7 +1385,7 @@ App enqueued.
       &quot;cluster&quot;: null
     },
     {
-      &quot;app_id&quot;: &quot;0x0000000000000000000000000000000000000000000000000000000000000005&quot;,
+      &quot;app_id&quot;: &quot;5&quot;,
       &quot;storage_hash&quot;: &quot;0xeb2a623210c080d0702cc520b790151861601c46d90179a6e8efe6bda8ac5477&quot;,
       &quot;storage_receipt&quot;: &quot;0x0000000000000000000000000000000000000000000000000000000000000000&quot;,
       &quot;cluster_size&quot;: 5,
@@ -1464,7 +1456,7 @@ App enqueued.
 <p>There is a flag <code>--contract_address</code> to use all commands to interact with non-default Fluence smart contract. You can deploy <a href="../bootstrap/contracts/Network.sol">Fluence contract</a> on your own and use CLI like this:</p>
 <pre><code class="language-bash">./fluence &lt;command&gt;
             ...
-            --contract_address 0x9995882876ae612bfd829498ccd73dd962ec950a \
+            --contract_address 0x074a79f29c613f4f7035cec582d0f7e4d3cda2e7 \
             ...
 </code></pre>
 <a class="header" href="#interactive-status" id="interactive-status"><h3>Interactive status</h3></a>
@@ -1508,7 +1500,7 @@ App enqueued.
 <p>For example, with <code>delete_app</code></p>
 <pre><code class="language-bash">./fluence delete_app \            
             --account          0x4180fc65d613ba7e1a385181a219f1dbfe7bf11d \
-            --app_id           0x0000000000000000000000000000000000000000000000000000000000000002 \
+            --app_id           2 \
             --keystore         ~/Library/Ethereum/keystore/UTC--2017-03-03T13-24-07.826187674Z--4e6cf0ed2d8bbf1fbbc9f2a100602ceba4bf1319 \
             --password         my_secure_passw0rd \
             --deployed
