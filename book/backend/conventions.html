@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Fluence backend SDK overview - The Fluence book</title>
+        <title>API conventions - The Fluence book</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -78,7 +78,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="../introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="../introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="../introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="../quickstart/index.html"><strong aria-hidden="true">2.</strong> Quick start</a></li><li><ol class="section"><li><a href="../quickstart/rust.html"><strong aria-hidden="true">2.1.</strong> Developing the backend app</a></li><li><a href="../quickstart/publish.html"><strong aria-hidden="true">2.2.</strong> Publishing your app</a></li><li><a href="../quickstart/web.html"><strong aria-hidden="true">2.3.</strong> Developing the web app</a></li><li><a href="../quickstart/wrappingup.html"><strong aria-hidden="true">2.4.</strong> Wrapping up</a></li></ol></li><li><a href="../backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="../backend/app_conventions.html"><strong aria-hidden="true">3.1.</strong> Backend app conventions</a></li><li><a href="../backend/sdk_overview.html" class="active"><strong aria-hidden="true">3.2.</strong> Fluence backend SDK overview</a></li><li><a href="../backend/app_debugging.html"><strong aria-hidden="true">3.3.</strong> Backend app debugging</a></li><li><a href="../backend/examples.html"><strong aria-hidden="true">3.4.</strong> Examples</a></li><li><a href="../backend/best_practices.html"><strong aria-hidden="true">3.5.</strong> Best practices</a></li></ol></li><li><a href="../roles/miner.html"><strong aria-hidden="true">4.</strong> Miner guide</a></li><li><a href="../tools/index.html"><strong aria-hidden="true">5.</strong> Tools and SDKs</a></li><li><ol class="section"><li><a href="../tools/cli_README.html"><strong aria-hidden="true">5.1.</strong> CLI</a></li><li><a href="../tools/rust_README.html"><strong aria-hidden="true">5.2.</strong> Rust SDK</a></li><li><a href="../tools/js_README.html"><strong aria-hidden="true">5.3.</strong> JS SDK</a></li></ol></li><li><a href="../project.html"><strong aria-hidden="true">6.</strong> Project status</a></li></ol>
+            <ol class="chapter"><li><a href="../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="../introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="../introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="../introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="../quickstart/index.html"><strong aria-hidden="true">2.</strong> Quick start</a></li><li><ol class="section"><li><a href="../quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend app</a></li><li><a href="../quickstart/publish.html"><strong aria-hidden="true">2.2.</strong> Publishing the backend app</a></li><li><a href="../quickstart/web.html"><strong aria-hidden="true">2.3.</strong> Developing the web app</a></li><li><a href="../quickstart/recap.html"><strong aria-hidden="true">2.4.</strong> Recap</a></li></ol></li><li><a href="../backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="../backend/sdk.html"><strong aria-hidden="true">3.1.</strong> SDK overview</a></li><li><a href="../backend/debugging.html"><strong aria-hidden="true">3.2.</strong> Debugging info</a></li><li><a href="../backend/examples.html"><strong aria-hidden="true">3.3.</strong> Key examples</a></li><li><a href="../backend/best_practices.html"><strong aria-hidden="true">3.4.</strong> Best practices</a></li><li><a href="../backend/conventions.html" class="active"><strong aria-hidden="true">3.5.</strong> API conventions</a></li></ol></li><li><a href="../nodes.html"><strong aria-hidden="true">4.</strong> Running Fluence nodes</a></li><li><a href="../tools/index.html"><strong aria-hidden="true">5.</strong> Tools and SDKs</a></li><li><ol class="section"><li><a href="../tools/cli.html"><strong aria-hidden="true">5.1.</strong> CLI</a></li><li><a href="../tools/rust.html"><strong aria-hidden="true">5.2.</strong> Rust SDK</a></li><li><a href="../tools/js.html"><strong aria-hidden="true">5.3.</strong> JS SDK</a></li></ol></li><li><a href="../project.html"><strong aria-hidden="true">6.</strong> Project status</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -143,8 +143,52 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#fluence-backend-sdk-overview" id="fluence-backend-sdk-overview"><h1>Fluence backend SDK overview</h1></a>
-<p>Fluence backend SDK consists of two crates: <code>main</code> and <code>macro</code>. The first one is used for all memory relative operations and logging (please find more information in <a href="./app_debugging.html">app debugging</a> section). The second one contains a procedural macro to simplify the entry function's signature. These crates can be used separately but the more preferred way is using the global <code>fluence</code> crate that reexports all others. In <code>Rust 2018 edition</code> it can be done by simply adding <code>use fluence::sdk::*</code> to the source.</p>
+                        <a class="header" href="#backend-app-conventions" id="backend-app-conventions"><h1>Backend app conventions</h1></a>
+<a class="header" href="#app-lifecycle" id="app-lifecycle"><h2>App lifecycle</h2></a>
+<p>The Fluence network backend infrastructure is based on Scala and Rust. Each computation node in the network has the <code>VM wrapper</code> written on Scala that interacts with a backend <code>app</code> written on Wasm and published to the network by developers. To be able to run supplied Wasm code <a href="https://github.com/fluencelabs/asmble">Asmble</a> is used. It compiles supplied Wasm code to a JVM class that then loaded by the <code>VM wrapper</code>. All other interactions between an <code>app</code> and the <code>VM wrapper</code> occur in the <code>VM wrapper</code> process address space without any inter-process communications.</p>
+<p>A <code>main</code> module is invoked by the <code>VM wrapper</code> according to the following scheme:</p>
+<ol>
+<li>
+<p>A <code>client-side</code> sends a request to <code>App</code> as a byte array.</p>
+</li>
+<li>
+<p>The <code>VM wrapper</code> calls <code>allocate</code> function of <code>main</code> Wasm module with a size of the array.</p>
+</li>
+<li>
+<p>The <code>VM wrapper</code> writes the array to memory of the module.</p>
+</li>
+<li>
+<p>The <code>VM wrapper</code> calls <code>invoke</code> function from <code>main</code> module with the address returned from <code>allocate</code> function and the array size.</p>
+</li>
+<li>
+<p>The <code>VM wrapper</code> synchronously waits of <code>invoke</code> result. After receiving a <code>pointer</code> from it, reads 4 bytes (that represents <code>size</code> of a byte array) and then reads <code>size</code> bytes from <code>pointer + 4</code> offset (<code>result</code>).</p>
+</li>
+<li>
+<p>The <code>VM wrapper</code> calls <code>deallocate</code> function of <code>main</code> Wasm module with the received pointer.</p>
+</li>
+<li>
+<p>Finally, a <code>result</code> is sent to a <code>client-side</code> as a byte array.</p>
+</li>
+</ol>
+<a class="header" href="#fluence-app-conventions" id="fluence-app-conventions"><h2>Fluence App conventions</h2></a>
+<p>There are several restriction and conventions that each supplied <code>app</code> has to be met:</p>
+<ol>
+<li>
+<p>An <code>app</code> can consist of several Wasm modules with different names, but only one of them (let's call it <code>main</code> module and all other as <code>side</code> modules according to the <a href="https://github.com/emscripten-core/emscripten/wiki/Linking#overview-of-dynamic-linking">emcscripten</a>) can be called from <code>user-side</code>. This <code>main</code> module MUST don't have the module name section. This requirement is based on the fact that according to the Wasm specification module name is optional, and now there aren't any possibilities to add it to a generated Wasm binary by default <code>rust</code> compiler.</p>
+</li>
+<li>
+<p>Each <code>main</code> module MUST have three export (in terms of the Wasm specification) functions with names <code>invoke</code>, <code>allocate</code> and <code>deallocate</code>.</p>
+</li>
+<li>
+<p><code>invoke</code> function is used as the <code>main</code> module handler function. It means that all client-side requests are routed to it. The exactly signature of this function MUST be <code>(func (export &quot;invoke&quot;) (param $buffer i32) (param $size i32) (result i32))</code> in wast representation. It receives two i32 params that represent a pointer to supplied argument and its size. If <code>client-side</code> send an empty byte buffer <code>invoke</code> SHOULD be called with two nulls (it means that according to Fluence protocol implementation honest nodes call <code>invoke</code> with nulls but malicious nodes can do anything). This function has to return a pointer to result that MUST have the next structure in memory: <code>| size (4 bytes; little endian) | result buffer (size bytes) |</code>. This convention is based on the fact that Wasm function can return only one value of i32, i64, f32, f64, i128 but there both pointer and size should be returned.</p>
+</li>
+<li>
+<p><code>allocate</code> function MUST have the next signature <code>(func (export &quot;allocate&quot;) (param $size i32) (result i32))</code> in wast representation. It MUST return a pointer as i32 to a module memory region long enough to hold <code>size</code> bytes.</p>
+</li>
+<li>
+<p><code>deallocate</code> function MUST have the next signature <code>(func (export &quot;deallocate&quot;) (param $address i32) (param $size i32) (return))</code>. It is called by the <code>VM wrapper</code> with a pointer to a memory region previously allocated by <code>allocate</code> function and its size. This function SHOULD free this memory region.</p>
+</li>
+</ol>
 <a class="header" href="#writing-app-without-sdk" id="writing-app-without-sdk"><h2>Writing app without SDK</h2></a>
 <p>For a start, let's review how a simple <code>hello-world</code> <code>app</code> is made without Fluence backend SDK on pure Rust. From <a href="app_conventions.html">fluence backend conventions</a> it follows that each <code>app</code> must have a <code>main</code> module with three export functions. Keeping in mind restrictions to their signatures, a basic structure of a <code>main</code> module can look like that:</p>
 <pre><code class="language-Rust">#[no_mangle]
@@ -228,118 +272,21 @@ pub unsafe fn deallocate(ptr: NonNull&lt;u8&gt;, size: usize) {
 }
 </code></pre>
 <p>The full working code of this example can be found <a href="https://github.com/fluencelabs/fluence/tree/master/vm/examples/hello-world/app-without-sdk">here</a>.</p>
-<a class="header" href="#fluence-sdk-usage" id="fluence-sdk-usage"><h2>Fluence SDK usage</h2></a>
+<a class="header" href="#misc" id="misc"><h2>Misc</h2></a>
 <p>From the example above it can be seen that <code>allocate</code> and <code>deallocate</code> functions serve only utility purpose and are normally used only by the <code>VM wrapper</code>. These functions aren't any that most of the developers would want to implement in their <code>app</code>. Fluence backend SDK provides <code>fluence::memory::alloc</code> and <code>fluence::memory::dealloc</code> functions also based on <a href="https://doc.rust-lang.org/beta/std/alloc/trait.GlobalAlloc.html">GlobalAlloc</a>. They exported by default after including the sdk and can be disabled by including it with <code>fluence = {default-features = false}</code>.</p>
-<p>The <code>invoke</code> function can be also simplified by using the Fluence backend SDK that provides <code>fluence::memory::write_result_to_mem</code> and <code>fluence::memory::read_input_from_mem_</code> in this way:</p>
-<pre><code class="language-Rust">#[no_mangle]
-pub unsafe fn invoke(_ptr: *mut u8, _len: usize) -&gt; usize {
-    let test_str = &quot;Hello, world!&quot;;
-    fluence::memory::write_result_to_mem(test_str)
-        .unwrap_or_else(|_| {
-            panic!(&quot;[Error] Putting the result string into a raw memory was failed&quot;)
-        })
-        .as_ptr() as usize
-}
-</code></pre>
-<a class="header" href="#invocation-handler-to-the-rescue" id="invocation-handler-to-the-rescue"><h3>Invocation handler to the rescue</h3></a>
-<p>The example above can be simplified a little bit more using procedural macros <code>invocation_handler</code> as the <code>hello-world</code> example mentioned in <a href="TODO">quick start</a> example:</p>
-<pre><code class="language-Rust">use fluence::sdk::*;
-
-#[invocation_handler]
-fn greeting(name: String) -&gt; String {
-    format!(&quot;Hello, world! From user {}&quot;, name)
-}
-</code></pre>
-<p>Internally this macro creates a new function <code>invoke</code> that converts a raw argument to the appropriate format, calls <code>f</code> and then converts its result via <code>memory::write_result_to_mem</code> from <code>fluence_sdk_main</code>. The following listing shows how this macro is expanded:</p>
-<pre><code class="language-Rust">use fluence::sdk::*;
-
-fn greeting(name: String) -&gt; String {
-    format!(&quot;Hello, world! From user {}&quot;, name)
-}
-
-#[no_mangle]
-pub unsafe fn invoke(ptr: *mut u8, len: usize) -&gt; std::ptr::NonNull&lt;u8&gt; {
-    let arg = memory::read_input_from_mem(ptr, len);
-    let arg = String::from_utf8(arg).unwrap();
-    let result = greeting(arg);
-    memory::write_result_to_mem(result.as_bytes()).expect(&quot;Putting result string to memory has failed&quot;)
-}
-</code></pre>
-<p>To use this macro with a function <code>f</code> some conditions have to be satisfied:</p>
-<ol>
-<li>
-<p><code>f</code> mustn't have more than one input argument.</p>
-</li>
-<li>
-<p><code>f</code> mustn't be <code>unsafe</code>, <code>const</code>, generic, have custom abi linkage or variadic param.</p>
-</li>
-<li>
-<p>The type of <code>f</code> input (if it present) and output parameters have to be one of {String, Vec<u8>} set.</p>
-</li>
-<li>
-<p><code>f</code> mustn't have the name <code>invoke</code>.</p>
-</li>
-</ol>
-<p>For troubleshooting and macros debugging <a href="https://github.com/dtolnay/cargo-expand">cargo expand</a> can be used.</p>
-<p>The macro also has an <code>init_fn</code> attribute that can be used for specifying initialization function name. This function will be called only in the first <code>invoke</code> function call. It can be used like this:</p>
-<pre><code class="language-Rust">use fluence::sdk::*;
-
-fn init() {
-    ...
-}
-
-#[invocation_handler(init_fn = init)]
-fn greeting(name: String) -&gt; String {
-    format!(&quot;Hello from Fluence to {}&quot;, name)
-}
-</code></pre>
-<p>This is expanded to</p>
-<pre><code class="language-Rust">use fluence::sdk::*;
-
-fn init() { 
-    ...
-}
-
-fn greeting(name: String) -&gt; String {
-    format!(&quot;Hello from Fluence to {}&quot;, name)
-}
-
-static mut IS_INITED: bool = false;
-
-#[no_mangle]
-pub unsafe fn invoke(ptr: *mut u8, len: usize) -&gt; std::ptr::NonNull&lt;u8&gt; {
-    if !IS_INITED { 
-        init();
-        unsafe { IS_INITED = true; }
-    }
-    let arg = memory::read_input_from_mem(ptr, len);
-    let arg = String::from_utf8(arg).unwrap();
-    let result = greeting(arg);
-    memory::write_result_to_mem(result.as_bytes()).expect(&quot;Putting result string to memory has failed&quot;)
-}
-</code></pre>
-<p>Example of usage <code>invocation_handler</code> with <code>init_fn</code> attribure can be found <a href="https://github.com/fluencelabs/fluence/tree/master/vm/examples/hello-world2/app-2018">here</a>.</p>
-<a class="header" href="#rust-edition-2015" id="rust-edition-2015"><h2>Rust edition 2015</h2></a>
-<p>To use Fluence SDK with <code>Rust 2015 edition</code> please import it like this:</p>
-<pre><code class="language-Rust">#![feature(custom_attribute)]
-extern crate fluence;
-
-use fluence::sdk::*;
-</code></pre>
-<p>Example of <code>hello-world2</code> <code>app</code> on <code>Rust edition 2015</code> can be found <a href="https://github.com/fluencelabs/fluence/tree/master/vm/examples/hello-world2/app-2015">here</a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../backend/app_conventions.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../backend/best_practices.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../backend/app_debugging.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../nodes.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -351,13 +298,13 @@ use fluence::sdk::*;
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="../backend/app_conventions.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="../backend/best_practices.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="../backend/app_debugging.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="../nodes.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
