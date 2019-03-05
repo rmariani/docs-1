@@ -78,7 +78,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="../introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="../introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="../introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="../quickstart/index.html"><strong aria-hidden="true">2.</strong> Quick start</a></li><li><ol class="section"><li><a href="../quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend app</a></li><li><a href="../quickstart/publish.html"><strong aria-hidden="true">2.2.</strong> Publishing the backend app</a></li><li><a href="../quickstart/web.html"><strong aria-hidden="true">2.3.</strong> Developing the web app</a></li><li><a href="../quickstart/recap.html"><strong aria-hidden="true">2.4.</strong> Recap</a></li></ol></li><li><a href="../backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="../backend/sdk.html"><strong aria-hidden="true">3.1.</strong> SDK overview</a></li><li><a href="../backend/debugging.html"><strong aria-hidden="true">3.2.</strong> Debugging info</a></li><li><a href="../backend/examples.html"><strong aria-hidden="true">3.3.</strong> Key examples</a></li><li><a href="../backend/best_practices.html" class="active"><strong aria-hidden="true">3.4.</strong> Best practices</a></li><li><a href="../backend/conventions.html"><strong aria-hidden="true">3.5.</strong> API conventions</a></li></ol></li><li><a href="../nodes.html"><strong aria-hidden="true">4.</strong> Running Fluence nodes</a></li><li><a href="../tools/index.html"><strong aria-hidden="true">5.</strong> Tools and SDKs</a></li><li><ol class="section"><li><a href="../tools/cli.html"><strong aria-hidden="true">5.1.</strong> CLI</a></li><li><a href="../tools/rust.html"><strong aria-hidden="true">5.2.</strong> Rust SDK</a></li><li><a href="../tools/js.html"><strong aria-hidden="true">5.3.</strong> JS SDK</a></li></ol></li><li><a href="../project.html"><strong aria-hidden="true">6.</strong> Project status</a></li></ol>
+            <ol class="chapter"><li><a href="../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="../introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="../introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="../introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="../quickstart/index.html"><strong aria-hidden="true">2.</strong> Quick start</a></li><li><ol class="section"><li><a href="../quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend app</a></li><li><a href="../quickstart/publish.html"><strong aria-hidden="true">2.2.</strong> Publishing the backend app</a></li><li><a href="../quickstart/web.html"><strong aria-hidden="true">2.3.</strong> Developing the web app</a></li><li><a href="../quickstart/recap.html"><strong aria-hidden="true">2.4.</strong> Recap</a></li></ol></li><li><a href="../backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="../backend/sdk.html"><strong aria-hidden="true">3.1.</strong> SDK overview</a></li><li><a href="../backend/best_practices.html" class="active"><strong aria-hidden="true">3.2.</strong> Best practices</a></li><li><a href="../backend/internals.html"><strong aria-hidden="true">3.3.</strong> Internals</a></li></ol></li><li><a href="../nodes.html"><strong aria-hidden="true">4.</strong> Running Fluence nodes</a></li><li><a href="../cli.html"><strong aria-hidden="true">5.</strong> Command-line interface</a></li><li><a href="../examples.html"><strong aria-hidden="true">6.</strong> Key examples</a></li><li><a href="../project.html"><strong aria-hidden="true">7.</strong> Project status</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -143,27 +143,72 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#best-practices" id="best-practices"><h1>Best practices</h1></a>
-<a class="header" href="#memory-management-in-app" id="memory-management-in-app"><h2>Memory management in app</h2></a>
-<p>Please pay attention to module memory usage - each <code>app</code> can have maximum 4Gb of heap. But in many situations <code>app</code> can have public API that explicitly or indirectly consumes module memory (e.g., by saving some user data). So attackers can make a DoS attack to such <code>app</code>. Usually, proper memory management can be reached by using fix-size collections like <a href="https://github.com/andylokandy/arraydeque">ArrayDeque</a>. In future Fluence backend SDK will provide some other collections for that.</p>
-<p>One example of careful memory management can be found in <a href="https://github.com/fluencelabs/fluence/tree/master/vm/examples/tic-tac-toe">tic-tac-toe</a>.</p>
+                        <a class="header" href="#best-practices-for-backend-applications" id="best-practices-for-backend-applications"><h1>Best practices for backend applications</h1></a>
+<a class="header" href="#request-routing" id="request-routing"><h2>Request routing</h2></a>
+<p>Fluence does not provide a sane request routing yet – only one function can be marked as an entry point. This means that each developer has to independently decide on an input argument format, parse this argument in the entry point function, and call other functions based on the passed action selector.</p>
+<p>One option would be to use JSON serialization (for example, provided by <a href="https://github.com/serde-rs/serde">serde</a> and <a href="https://github.com/serde-rs/json">serde_json</a> crates) to wrap input data. Once the input is parsed, the code in the entry point function can perform manual routing:</p>
+<pre><code class="language-Rust">use fluence::sdk::*;
+
+use serde_json::{json, Value};
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize)]
+pub struct Request {
+    pub action: String,
+    pub player_name: String,
+}
+
+#[invocation_handler]
+fn handle_request(req: String) -&gt; String {
+  let value: Value = serde_json::from_str(req.as_str())?;
+  let request: Request = serde_json::from_value(value.clone())?;
+  
+  match request.action.as_str() {
+    &quot;create_game&quot; =&gt; {
+      // create a new game
+    }
+    
+    ...
+    
+    &quot;move&quot; =&gt; {
+      // make a player's move
+    }
+  }
+}
+</code></pre>
+<a class="header" href="#authentication" id="authentication"><h2>Authentication</h2></a>
+<p><strong>TBD</strong></p>
+<a class="header" href="#memory-management" id="memory-management"><h2>Memory management</h2></a>
+<p>At the current moment, backend applications cannot use more than 4GB of WebAssembly memory. To avoid running out of memory, applications should carefully plan memory usage. For example, an open to the public multi-user game might employ a <a href="https://en.wikipedia.org/wiki/Circular_buffer">ring buffer</a>-like data structure to evict <a href="https://en.wikipedia.org/wiki/Cache_replacement_policies#First_in_first_out_(FIFO)">least recently created</a> user records first.</p>
+<p>Crates such as <a href="https://docs.rs/arraydeque/0.4.3/arraydeque/"><code>arraydeque</code></a> or <a href="http://contain-rs.github.io/linked-hash-map/linked_hash_map/"><code>linked_hash_map</code></a> can be used to limit the number of stored entries.</p>
+<p>Other policies such as <a href="https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_(LRU)">LRU</a> eviction can be used as well. Another option would be to restrict the number of users the application can handle or accept state modifications made only by the limited subset of users with write permissions.</p>
+<p>An illustration of vigilant memory management can be found in the <a href="https://github.com/fluencelabs/fun/tree/master/tic-tac-toe">tic-tac-toe</a> example game.</p>
 <a class="header" href="#shrinking-app-code-size" id="shrinking-app-code-size"><h2>Shrinking app code size</h2></a>
-<p>There are some techniques for reducing size of a generated <code>app</code>. Most of them can be found in this excellent <a href="https://rustwasm.github.io/book/reference/code-size.html">chapter</a> of <code>Rust and WebAssembly</code> book. But as for the Fluence network to reduce the size of binary as much is possible <code>no_std</code> crate without SDK can be used. The example of <code>hello-world</code> implemented without the SDK can be found in <a href="sdk_overview.html">Fluence backend SDK overview</a>.</p>
+<p>In most cases, there is no need to worry about the size of the generated WebAssembly code. However, techniques for reducing the WebAssembly package size can be found in the <a href="https://rustwasm.github.io/book/reference/code-size.html">Rust and WebAssembly book</a>. Another option would be to avoid the use of the Fluence SDK and implement required API functions from scratch.</p>
 <a class="header" href="#panics" id="panics"><h2>Panics</h2></a>
-<p>Using of <code>unwrap</code>, <code>expect</code> and others like these are possible in an <code>app</code>. Each of them leads to an exception that will catch in the <code>VM wrapper</code>. A error message of such exception won't be much informative in this case (like this <code>{&quot;Error&quot;:{&quot;code&quot;:&quot;TrapError&quot;,&quot;message&quot;:&quot;Function invoke with args: List(1117056, 53) was failed&quot;,&quot;cause&quot;:&quot;Function invoke with args: List(1117056, 53) was failed&quot;}}</code>), but <code>app</code> will be in a consistent state and could process other requests.</p>
+<p>Backend applications are allowed to panic, for example, if an <code>unwrap</code> or <code>expect</code> call fails. At the current moment, the returned error message will not be too informative in this case:</p>
+<pre><code>{
+   &quot;Error&quot;:{
+      &quot;code&quot;:&quot;TrapError&quot;,
+      &quot;message&quot;:&quot;Function invoke with args: List(1117056, 53) was failed&quot;,
+      &quot;cause&quot;:&quot;Function invoke with args: List(1117056, 53) was failed&quot;
+   }
+}
+</code></pre>
+<p>However, the application will remain in consistent state and will be able to process other requests.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../backend/examples.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../backend/sdk.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../backend/conventions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../backend/internals.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -175,13 +220,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="../backend/examples.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="../backend/sdk.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="../backend/conventions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="../backend/internals.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
