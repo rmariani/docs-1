@@ -463,34 +463,36 @@ It should not be used in production or in a security-sensitive context.</p>
 UTC--2019-03-03T14-48-59.325Z--<b>e1f9c157b45838ca83cb51b7bdcc6c7a3e56650f</b>
 </pre>
 <a class="header" href="#top-up-your-account-with-funds" id="top-up-your-account-with-funds"><h3>Top up your account with funds</h3></a>
-<p>There are two main Rinkeby faucets. <a href="https://faucet.rinkeby.io/">This one</a> gives you up to 18 Ether, but it requires you to post an Ethereum address to a social network. <a href="http://rinkeby-faucet.com/">Another one</a> gives you ETH right away, but just 0.001 Ether – which should be enough for this tutorial.</p>
+<p>There are two main Rinkeby faucets.</p>
+<p><a href="https://faucet.rinkeby.io/">This one</a> gives you up to 18 Ether, but it requires you to post an Ethereum address to a social network.</p>
+<p><a href="http://rinkeby-faucet.com/">Another one</a> gives you ETH right away, but just 0.001 Ether, which isn't enough for the publishing, so you may try to top up several times.</p>
 <a class="header" href="#installing-the-fluence-cli" id="installing-the-fluence-cli"><h2>Installing the Fluence CLI</h2></a>
 <p>It is hard to send publication transactions manually, so we provide the Fluence CLI.<br />
 You can download the CLI from the <a href="https://github.com/fluencelabs/fluence/releases/">releases</a> page, or fetch it in the terminal:</p>
 <p><strong>Linux</strong></p>
-<pre><code class="language-bash">~ $ curl -L https://github.com/fluencelabs/fluence/releases/download/v0.1.5/fluence-cli-0.1.5-linux-x64 -o fluence
+<pre><code class="language-bash">curl -L https://github.com/fluencelabs/fluence/releases/download/v0.1.5/fluence-cli-0.1.5-linux-x64 -o fluence
 </code></pre>
 <p><strong>macOS</strong></p>
-<pre><code class="language-bash">~ $ curl -L https://github.com/fluencelabs/fluence/releases/download/v0.1.5/fluence-cli-0.1.5-mac-x64 -o fluence
+<pre><code class="language-bash">curl -L https://github.com/fluencelabs/fluence/releases/download/v0.1.5/fluence-cli-0.1.5-mac-x64 -o fluence
 
 </code></pre>
 <p>Don't forget to add permissions to run it:</p>
-<pre><code class="language-bash">~ $ chmod +x ./fluence
+<pre><code class="language-bash">chmod +x ./fluence
 
 # check that the CLI is working
-~ $ ./fluence --version
+./fluence --version
 Fluence CLI 0.1.5
 </code></pre>
 <a class="header" href="#publishing-the-application-with-the-fluence-cli" id="publishing-the-application-with-the-fluence-cli"><h2>Publishing the application with the Fluence CLI</h2></a>
 <p>As we have already mentioned, you need to have access to the Ethereum Rinkeby and Swarm networks. You can either use Ethereum and Swarm nodes set up by Fluence Labs, or specify other nodes by providing their URIs using <code>--eth_url</code> and <code>--swarm_url</code> options.</p>
 <p>You also need a Rinkeby account with some money on it (you can <a href="https://faucet.rinkeby.io/">get Ethers from faucet</a>) and its private key, which can either be a hex string or a <a href="quickstart/../cli.html#keystore-json-file">Keystore file</a>.</p>
 <p>To interact with the Fluence CLI, we will set it up first:</p>
-<pre><code class="language-bash">~ $ ./fluence setup
+<pre><code class="language-bash">./fluence setup
 </code></pre>
 <p>This command will ask you to enter the Fluence contract address, Swarm and Ethereum node addresses, and, finally, your account credentials. It will create the config file which will be used by the CLI tool in the future.</p>
 <p>By default, Swarm and Ethereum nodes controlled by Fluence Labs will be used. Note that you need to provide either the secret key <strong>or</strong> the Keystore file path + password to be able to send transactions to Ethereum.</p>
 <p>Having all that, now you are ready to publish your application:</p>
-<pre><code class="language-bash">~ $ ./fluence publish \
+<pre><code class="language-bash">./fluence publish \
             --code_path        ~/hello-world/target/wasm32-unknown-unknown/release/hello_world.wasm \
             --gas_price        10 \
             --cluster_size     4 \
@@ -509,7 +511,7 @@ App deployed.
 </code></pre>
 <a class="header" href="#verifying-the-application-status" id="verifying-the-application-status"><h2>Verifying the application status</h2></a>
 <p>To check the state of your application – for example, which nodes it was deployed to, run:</p>
-<pre><code class="language-bash">~ $ ./fluence status \
+<pre><code class="language-bash">./fluence status \
             --app_id           &lt;your app id here&gt;
 </code></pre>
 <p>The output will be in JSON, and should look similar to the following:</p>
