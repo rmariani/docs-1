@@ -149,14 +149,14 @@
 <a class="header" href="#what-can-be-built-with-fluence" id="what-can-be-built-with-fluence"><h2>What can be built with Fluence?</h2></a>
 <p>Fluence can be used as a general purpose backend engine for decentralized applications. Because of its cost efficiency, developers generally do not have to worry much about low-level code optimization. Existing software packages can be ported to Fluence as is, once they are compiled into WebAssembly.</p>
 <a class="header" href="#decentralized-databases" id="decentralized-databases"><h4>Decentralized databases</h4></a>
-<p>As an <a href="https://github.com/fluencelabs/fun/tree/master/llamadb">example</a>, we have ported an existing toy SQL database <a href="https://github.com/nukep/llamadb">LlamaDB</a> to run in the decentralized environment by making just a few modifications and compiling it into WebAssembly.</p>
-<p>We expect it should not be extremely difficult to port an existing database such as <a href="https://www.sqlite.org/index.html">SQLite</a> or <a href="https://github.com/facebook/rocksdb">RocksDB</a> to Fluence. Deployed, this database could serve frontends of user-facing decentralized applications.</p>
+<p>As an <a href="https://github.com/fluencelabs/tutorials/tree/master/llamadb">example</a>, we have ported an existing toy SQL database <a href="https://github.com/nukep/llamadb">LlamaDB</a> to run in the decentralized environment by making just a few modifications and compiling it into WebAssembly.</p>
+<p>We expect it should not be extremely difficult to port an existing database such as SQLite or RocksDB to Fluence. Deployed, this database could serve frontends of user-facing decentralized applications.</p>
 <p>This, coupled with decentralized storages such as IPFS or Swarm could enable fully decentralized applications. Such applications would use a decentralized storage to store static data, and a decentralized database running on top of Fluence – to serve dynamic client requests.</p>
 <a class="header" href="#gambling-applications" id="gambling-applications"><h4>Gambling applications</h4></a>
 <p>Simple dice games or roulette can be ported to Fluence fairly easily. However, at the current moment Fluence is not able to run by itself <a href="https://en.wikipedia.org/wiki/Perfect_information">imperfect information games</a> such as Texas Holdem poker or Guess the Number. The reason is that full game state can be read by nodes running the backend, and Fluence does not have privacy-preserving computations built in into its SDK.</p>
-<p>We expect, however, that approaches such as <a href="https://ethereum.stackexchange.com/questions/376/what-are-effective-and-secure-ways-of-shuffling-a-deck-of-cards-in-a-contract/758">decentralized card deck shuffling</a> can be employed to port certain imperfect information games to the Fluence network. In the meanwhile we have prepared a <em><a href="https://github.com/fluencelabs/fun/tree/master/guessing-game">broken implementation</a></em> of Guess the Number game ;)</p>
+<p>We expect, however, that approaches such as <a href="https://ethereum.stackexchange.com/questions/376/what-are-effective-and-secure-ways-of-shuffling-a-deck-of-cards-in-a-contract/758">decentralized card deck shuffling</a> can be employed to port certain imperfect information games to the Fluence network. In the meanwhile we have prepared a <em><a href="https://github.com/fluencelabs/tutorials/tree/master/guessing-game">broken implementation</a></em> of Guess the Number game ;)</p>
 <a class="header" href="#games" id="games"><h4>Games</h4></a>
-<p>Perfect information games can be easily built on top of Fluence. Think of chess, Go, rock–paper–scissors, games similar to Dungeons and Dragons, or roll-and-move board games. We have prepared a <a href="https://github.com/fluencelabs/fun/tree/master/tic-tac-toe">tic-tac-toe</a> example to play with. Collectible decentralized applications can be launched on Fluence as well.</p>
+<p>Perfect information games can be easily built on top of Fluence. Think of chess, Go, rock–paper–scissors, games similar to Dungeons and Dragons, or roll-and-move board games. We have prepared a <a href="https://github.com/fluencelabs/tutorials/tree/master/tic-tac-toe">tic-tac-toe</a> example to play with. Collectible decentralized applications can be launched on Fluence as well.</p>
 <a class="header" href="#how-does-fluence-work" id="how-does-fluence-work"><h2>How does Fluence work?</h2></a>
 <p>In order to reach low latency and high throughput, Fluence splits network nodes into two layers: the <em>real-time processing layer</em> and the <em>batch validation layer</em>.</p>
 <p>The real-time processing layer is able to promptly serve client requests, but provides only moderate security guarantees that returned responses are correct. Later, the batch validation layer additionally verifies returned responses, and if it is found that some of the responses were incorrect, offending real-time nodes lose their deposits.</p>
@@ -259,60 +259,62 @@ GROUP BY DATE(ts)
 <p>Generally, clients are not responsible for making any payments to network nodes. Nevertheless, different external monetization schemes are possible for reimbursing developers. The Fluence network does not prescribe an exact monetization scheme; however, it might provide some of the most common schemes through extension packages.</p>
 <p>For example, one developer might allow only those clients from a whitelist to interact with the deployed backend, charging a flat rate to add a client to that whitelist; another developer might charge clients a fixed fee per each submitted transaction. It might also be possible for clients to pay no explicit fee while the developer uses their personal funds to cover the miners’ expenses.</p>
 <a class="header" href="#quickstart" id="quickstart"><h1>Quickstart</h1></a>
-<p>This document will guide you through three main steps of development with Fluence.</p>
-<p>You will develop a traditional two-tiered web application with a backend written in Rust, and a frontend built with JavaScript. Unlike traditional two-tiered architecture, however, your backend will be decentralized and running on top of the Fluence network, not requiring a dedicated server machine.</p>
-<p>We will show you how to use Fluence Rust SDK to develop a backend in Rust, and compile it to WebAssembly. Then, to deploy your backend to the Fluence network, you will publish it to the Fluence smart contract. And finally, build a frontend integrated with your decentralized backend.</p>
-<p>If you experience any problems with this guide, or a desire to discuss Fluence with the team, feel free to join our <a href="https://discordapp.com/invite/AjfbDKQ">Discord</a>.</p>
+<p>This document will guide you through the three major steps of development with Fluence.</p>
+<p>You will develop a two-tiered web application with the Rust backend and the JavaScript frontend. While the architecture of this application resembles a conventional centralized one, the backend will get magically decentralized and will run on top of the Fluence network.</p>
+<p>First, you will use the Fluence Rust SDK to develop the backend and compile it to a WebAssembly package. After that, to deploy the obtained backend package to the Fluence network, you will upload it to Swarm and publish the Swarm reference to the Fluence smart contract. Finally, you will build the frontend which will interact with the backend running in the Fluence network.</p>
+<p>Should you have any questions, feel free to join our <a href="https://discordapp.com/invite/AjfbDKQ">Discord</a>!</p>
 <a class="header" href="#developing-the-backend-app" id="developing-the-backend-app"><h1>Developing the backend app</h1></a>
-<p>Fluence runs Webassembly programs, so it's possible to build a Fluence backend in any program language that targets Wasm. In this guide, we will use Rust as a language of choice.</p>
-<p>First you will build a simple hello-world backend in Rust, adapt it to be used with Fluence, and compile to Webassembly.</p>
+<p>Fluence runs WebAssembly programs, so it is possible to build a Fluence backend in any language that targets WebAssembly. In this guide we will use Rust as a language of choice.</p>
+<p>First you will build a hello world Rust app, adapt it to Fluence, and then compile it to WebAssembly.</p>
 <a class="header" href="#setting-up-rust" id="setting-up-rust"><h2>Setting up Rust</h2></a>
-<p>Let's get some Rust.</p>
-<p>Install rust compiler and it's tools:</p>
-<pre><code class="language-bash"># install Rust compiler and other tools to `~/.cargo/bin`
+<p>Let's get some Rust!</p>
+<p>Install the Rust compiler:</p>
+<pre><code class="language-bash"># installs the Rust compiler and supplementary tools to `~/.cargo/bin`
 ~ $ curl https://sh.rustup.rs -sSf | sh -s -- -y
 info: downloading installer
 ...
 Rust is installed now. Great!
 To configure your current shell run source $HOME/.cargo/env
 </code></pre>
-<p>Let's listen to the installer and configure your current shell:</p>
+<p>Let's listen to the installer and configure your current shell:<br />
+<small>(new shell environments should pick up the right configuration automatically)</small></p>
 <pre><code class="language-bash">~ $ source $HOME/.cargo/env
 &lt;no output&gt;
 </code></pre>
-<p>Fluence Rust SDK <a href="???">uses custom allocator (TODO: link)</a> for copying bytes to and from virtual machine internal memory, and that requires nightly toolchain. To install nightly toolchain, run:</p>
+<p>After that, we need to install the nighly Rust toolchain:<br />
+<small>(Fluence Rust SDK requires the nightly toolchain due to certain memory operations)</small></p>
 <pre><code class="language-bash">~ $ rustup toolchain install nightly
 info: syncing channel updates ...
 ...
   nightly-&lt;arch&gt; installed - rustc 1.34.0-nightly (57d7cfc3c 2019-02-11)
 </code></pre>
-<p>To check nightly toolchain was installed succesfully:</p>
+<p>Let's check that the nightly toolchain was installed successfully:</p>
 <pre><code class="language-bash">~ $ rustup toolchain list | grep nightly
-# output should contain nighly toolchain
+# the output should contain the nighly toolchain
 ...
 nightly-&lt;arch&gt;
 </code></pre>
-<p>Also, to be able to compile Rust to WebAssembly, we need to add wasm32 compilation target. Just run the following:</p>
+<p>To compile Rust to WebAssembly, we also need to add the <code>wasm32</code> compilation target:</p>
 <pre><code class="language-bash"># install target for WebAssembly
 ~ $ rustup target add wasm32-unknown-unknown --toolchain nightly
 info: downloading component 'rust-std' for 'wasm32-unknown-unknown'
 info: installing component 'rust-std' for 'wasm32-unknown-unknown'
 </code></pre>
-<p>To check that everything is set up correctly, let's compile some Rust code:</p>
-<pre><code class="language-bash"># create test.rs with a simple program that returns number 1
+<p>Finally, let's check that everything was set up correctly and compile a sample Rust code:</p>
+<pre><code class="language-bash"># create a simple program that always returns 1
 ~ $ echo &quot;fn main(){1;}&quot; &gt; test.rs
 
-# compile it to wasm using rustc from nightly toolchain
+# compile it to WebAssembly using rustc from the nightly toolchain
 ~ $ rustup run nightly rustc --target=wasm32-unknown-unknown test.rs
 &lt;no output&gt;
 
-# check test.wasm was created
+# check that the test.wasm output file was created
 ~ $ ls -lh test.wasm
 -rwxr-xr-x  1 user  user   1.4M Feb 11 11:59 test.wasm
 </code></pre>
 <p>If everything looks similar, then it's time to create a Rust hello-world project!</p>
 <a class="header" href="#creating-an-empty-rust-package" id="creating-an-empty-rust-package"><h2>Creating an empty Rust package</h2></a>
-<p>First, let's create a new empty Rust package:</p>
+<p>Let's create a new empty Rust package:</p>
 <pre><code class="language-bash"># create empty Rust package
 ~ $ cargo +nightly new hello-world --edition 2018
 Created binary (application) `hello-world` package
@@ -321,23 +323,23 @@ Created binary (application) `hello-world` package
 ~ $ cd hello-world
 ~/hello-world $
 </code></pre>
-<p>More info on creating a new Rust project can be found in <a href="https://doc.rust-lang.org/cargo/guide/creating-a-new-project.html">Rust docs</a>.</p>
-<a class="header" href="#optional-creating-a-hello-world-rust-application" id="optional-creating-a-hello-world-rust-application"><h2>Optional: Creating a Hello World Rust application</h2></a>
-<p>If you are familiar with Rust, feel free to <a href="#creating-a-fluence-hello-world-backend">skip</a> that section.</p>
-<p>Let's write some code. Our backend should be able to receive a username from program arguments, and print greeting with the username in it.</p>
+<p>More info on creating a new Rust project can be found in the Rust <a href="https://doc.rust-lang.org/cargo/guide/creating-a-new-project.html">Cargo book</a>.</p>
+<a class="header" href="#optional-creating-a-hello-world-rust-application" id="optional-creating-a-hello-world-rust-application"><h2>[Optional] Creating a Hello World Rust application</h2></a>
+<p>If you are already familiar with Rust, feel free to skip this section.</p>
+<p>Let's write some code: our backend should receive a user name from the program input, and then print a greeting.</p>
 <p>Take a look at <code>src/main.rs</code>:</p>
 <pre><code class="language-bash">~/hello-world $ cat src/main.rs
 </code></pre>
-<p>You will see the following code. It's there by default:</p>
+<p>You will see the following code, which should be there by default and almost does what we need:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
 </code></pre></pre>
-<p>It almost does what we need, except for reading a username. So, open <code>src/main.rs</code> in your editor, delete all the code in there, and paste the following:</p>
+<p>Open <code>src/main.rs</code> in any editor, delete all existing code, and paste the following:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::env;
 
 fn greeting(name: String) -&gt; String {
-    format!(&quot;Hello, world! From user {}&quot;, name)
+    format!(&quot;Hello, world! -- {}&quot;, name)
 }
 
 fn main() {
@@ -345,20 +347,20 @@ fn main() {
     println!(&quot;{}&quot;, greeting(name));
 }
 </code></pre></pre>
-<p>What this code does:</p>
+<p>This code:</p>
 <ol>
-<li>Defines a <code>greeting</code> function that takes a name, and returns a greeting message</li>
-<li>Defines a <code>main</code> function that reads first program argument, passes it to <code>greeting</code>, and prints the result</li>
+<li>defines the <code>greeting</code> function which takes a name and returns a greeting message</li>
+<li>defines the <code>main</code> function which reads the first argument, passes it to the <code>greeting</code> function, and prints the returned result</li>
 </ol>
 <p>Let's now compile and run our example:</p>
-<pre><code class="language-bash">~/hello-world $ cargo +nightly run myName
+<pre><code class="language-bash">~/hello-world $ cargo +nightly run MyName
    Compiling hello-world v0.1.0 (/root/hello-world)
     Finished dev [unoptimized + debuginfo] target(s) in 0.70s
-     Running `target/debug/hello-world myName`
-Hello, world! From user myName
+     Running `target/debug/hello-world MyName`
+Hello, world! -- MyName
 </code></pre>
 <hr />
-<p><strong>WARNING:</strong> If you see the following error, you should install <a href="https://gcc.gnu.org/install/">gcc</a> and try <code>cargo +nightly run</code> again:</p>
+<p><strong>WARNING!</strong> If you see the following error, you should install <a href="https://gcc.gnu.org/install/">gcc</a> and try <code>cargo +nightly run</code> again:</p>
 <pre><code class="language-bash">Compiling hello-world v0.1.0 (/root/hello-world)
 error: linker cc not found
   |
@@ -368,11 +370,12 @@ error: aborting due to previous error
 error: Could not compile hello-world.
 </code></pre>
 <hr />
-<p>Now that we have a working hello world, it's time to adapt it to be used with Fluence.</p>
-<a class="header" href="#creating-a-fluence-hello-world-backend" id="creating-a-fluence-hello-world-backend"><h2>Creating a Fluence Hello World backend</h2></a>
-<p>For a backend to be compatible with Fluence network, it should <a href="quickstart/backend.html#wasm-program-conventions">follow a few conventions</a>, so Fluence knows how to call your code correctly. To reduce boilerplate and make it easier, we developed a Fluence Rust SDK. Let's see how to use it.</p>
+<p>Now that we have a working Hello World application, it's time to adapt it for Fluence.</p>
+<a class="header" href="#creating-a-hello-world-backend-for-fluence" id="creating-a-hello-world-backend-for-fluence"><h2>Creating a Hello World backend for Fluence</h2></a>
+<p>For a backend to be compatible with the Fluence network, it should follow few conventions to let Fluence nodes run your code correctly. To reduce the amount of boilerplate code, we have developed the Rust SDK. Let's see how to use it.</p>
 <a class="header" href="#adding-fluence-as-a-dependency" id="adding-fluence-as-a-dependency"><h3>Adding Fluence as a dependency</h3></a>
-<p>First you need to add it to <code>Cargo.toml</code> as a dependency. Let's take a look at <code>Cargo.toml</code>:</p>
+<p>First you need to add the Fluence Rust SDK to as a dependency.<br />
+Let's take a look at <code>Cargo.toml</code>:</p>
 <pre><code class="language-bash">~/hello-world $ cat Cargo.toml
 </code></pre>
 <p>It should look like this:</p>
@@ -384,7 +387,7 @@ edition = &quot;2018&quot;
 
 [dependencies]
 </code></pre>
-<p>Now, open <code>Cargo.toml</code> in your editor, and add <code>fluence</code> to <code>dependencies</code>:</p>
+<p>Now, open <code>Cargo.toml</code> in the editor, and add <code>fluence</code> to <code>dependencies</code>:</p>
 <pre><code class="language-toml">[package]
 name = &quot;hello-world&quot;
 version = &quot;0.1.0&quot;
@@ -392,10 +395,10 @@ authors = [&quot;root&quot;]
 edition = &quot;2018&quot;
 
 [dependencies]
-fluence = { version = &quot;0.0.11&quot;}
+fluence = {version = &quot;0.0.11&quot;}
 </code></pre>
-<a class="header" href="#implementing-backend-greeting-logic" id="implementing-backend-greeting-logic"><h3>Implementing backend greeting logic</h3></a>
-<p>Create &amp; open <code>~/hello-world/src/lib.rs</code> in your editor and paste the following code there:</p>
+<a class="header" href="#implementing-the-backend-logic" id="implementing-the-backend-logic"><h3>Implementing the backend logic</h3></a>
+<p>Create and open <code>~/hello-world/src/lib.rs</code> in the editor and paste the following code there:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -406,11 +409,12 @@ fn greeting(name: String) -&gt; String {
     format!(&quot;Hello, world! From user {}&quot;, name)
 }
 #}</code></pre></pre>
-<p>This code imports Fluence SDK, and marks <code>greeting</code> function with <code>#[invocation_handler]</code>, so Fluence knows how to call it.</p>
-<p>Function marked with <code>#[invocation_handler]</code> is called a <em>gateway function</em>. It is an entrypoint to your application, all transactions sent by users will be passed to that function, and it's result will be available to users. Gateway function can receive and return either <code>String</code> or <code>Vec&lt;u8&gt;</code>.</p>
+<p>This code imports the Fluence SDK, and marks the <code>greeting</code> function with the <code>#[invocation_handler]</code> macro.</p>
+<p>The function marked with the <code>#[invocation_handler]</code> macro is called a <em>gateway function</em>. It is essentially the entry point to your application: all client transactions will be passed to this function, and once it returns a result, clients can read this result.</p>
+<p>Gateway functions are allowed to take and return only <code>String</code> or <code>Vec&lt;u8&gt;</code> values – check out the <a href="quickstart/../backend/sdk.html">SDK overview</a> for more information.</p>
 <a class="header" href="#making-it-a-library" id="making-it-a-library"><h3>Making it a library</h3></a>
-<p>For a gateway function to be exported and available for Fluence to call, backend should be compiled to WebAssembly as a library.</p>
-<p>To make your backend a library, open <code>Cargo.toml</code> in your editor, and paste the following there:</p>
+<p>For the gateway function to be correctly exported and thus available for Fluence, the backend should be compiled to WebAssembly as a library.</p>
+<p>To make the backend a library, open <code>Cargo.toml</code> in the editor, and add the <code>[lib]</code>section:</p>
 <pre><code class="language-toml">[package]
 name = &quot;hello-world&quot;
 version = &quot;0.1.0&quot;
@@ -426,14 +430,15 @@ crate-type = [&quot;cdylib&quot;]
 fluence = { version = &quot;0.0.11&quot;}
 </code></pre>
 <a class="header" href="#compiling-to-webassembly" id="compiling-to-webassembly"><h3>Compiling to WebAssembly</h3></a>
-<p>Run the following code to build a <code>.wasm</code> file from your Rust code.</p>
-<p>NOTE: Downloading and compiling dependencies might take a few minutes.</p>
+<p>To build the <code>.wasm</code> file, run this from the application directory:<br />
+<small>(note: downloading and compiling dependencies might take a few minutes)</small></p>
 <pre><code class="language-bash">~/hello-world $ cargo +nightly build --lib --target wasm32-unknown-unknown --release
     Updating crates.io index
     ...
     Finished release [optimized] target(s) in 1m 16s
 </code></pre>
-<p>If everything goes well, you should have a <code>.wasm</code> file deep in <code>target</code>. Let's check it:</p>
+<p>If everything goes well, you should get the <code>.wasm</code> file deep in the target directory.<br />
+Let's check it:</p>
 <pre><code class="language-bash">~/hello-world $ ls -lh target/wasm32-unknown-unknown/release/hello_world.wasm
 -rwxr-xr-x  2 user  user  1.4M Feb 11 11:59 target/wasm32-unknown-unknown/release/hello_world.wasm
 </code></pre>
@@ -673,7 +678,7 @@ extern crate fluence;
 
 use fluence::sdk::*;
 </code></pre>
-<p>Example Rust 2015 application can be found <a href="https://github.com/fluencelabs/fluence/tree/master/vm/examples/hello-world2/app-2015">here</a>.</p>
+<p>Example Rust 2015 application can be found <a href="https://github.com/fluencelabs/tutorials/tree/master/hello-world/app-logger-rust-2015">here</a>.</p>
 <a class="header" href="#entry-point-function" id="entry-point-function"><h2>Entry point function</h2></a>
 <p>Each WebAssembly backend application deployed to the Fluence network is expected to provide a single entry point function named <code>invoke</code>. The easiest way to implement this function is to use the <code>invocation_handler</code> macro provided by the Fluence SDK:</p>
 <pre><code class="language-Rust">use fluence::sdk::*;
@@ -866,7 +871,7 @@ pub unsafe fn deallocate(ptr: *mut u8, size: usize) {
 </li>
 </ol>
 <a class="header" href="#unmanaged-application-example" id="unmanaged-application-example"><h2>Unmanaged application example</h2></a>
-<p>Here is how a simple hello world application can be implemented without the Fluence SDK:</p>
+<p>Here is how a simple <a href="https://github.com/fluencelabs/tutorials/tree/master/hello-world/app-nosdk-rust-2018">hello world</a> application can be implemented without the Fluence SDK:</p>
 <pre><code class="language-Rust">#![feature(allocator_api)]
 
 use std::alloc::{Alloc, Global, Layout};
@@ -1534,12 +1539,12 @@ App enqueued.
 <a class="header" href="#examples" id="examples"><h1>Examples</h1></a>
 <p>We have provided few simple applications utilizing the Fluence network infrastructure:</p>
 <ul>
-<li><a href="https://github.com/fluencelabs/fun/tree/master/hello-world">Hello world</a> is a basic demo application demonstrating Fluence SDK usage</li>
-<li><a href="https://github.com/fluencelabs/fun/tree/master/llamadb">Llamadb</a> is a port of an existing in-memory SQL database</li>
-<li><a href="https://github.com/fluencelabs/fun/tree/master/tic-tac-toe">Tic-tac-toe</a> is a basic <a href="https://en.wikipedia.org/wiki/Perfect_information">perfect information</a> multi-player game</li>
-<li><a href="https://github.com/fluencelabs/fun/tree/master/dice-game">Dice game</a> demonstrates how an RNG can be used to implement a simple gambling application</li>
-<li><a href="https://github.com/fluencelabs/fun/tree/master/guessing-game">Guess the Number</a> is an invalid implementation of an imperfect information game</li>
-<li><a href="https://github.com/fluencelabs/fun/streamr">Streamr analytics</a> is a simple analytics built on top of a <a href="https://www.streamr.com/">blockchain-based data marketplace</a></li>
+<li><a href="https://github.com/fluencelabs/tutorials/tree/master/hello-world/app-sdk-rust-2018">Hello world</a> is a basic demo application demonstrating Fluence SDK usage</li>
+<li><a href="https://github.com/fluencelabs/tutorials/tree/master/llamadb">Llamadb</a> is a port of an existing in-memory SQL database</li>
+<li><a href="https://github.com/fluencelabs/tutorials/tree/master/tic-tac-toe">Tic-tac-toe</a> is a basic <a href="https://en.wikipedia.org/wiki/Perfect_information">perfect information</a> multi-player game</li>
+<li><a href="https://github.com/fluencelabs/tutorials/tree/master/dice-game">Dice game</a> demonstrates how an RNG can be used to implement a simple gambling application</li>
+<li><a href="https://github.com/fluencelabs/tutorials/tree/master/guessing-game">Guess the Number</a> is an invalid implementation of an imperfect information game (which cannot be launched on Fluence at the current moment)</li>
+<li><a href="https://github.com/fluencelabs/tutorials/tree/master/streamr">Streamr analytics</a> is a simple analytics built on top of a <a href="https://www.streamr.com/">blockchain-based data marketplace</a></li>
 </ul>
 <a class="header" href="#project-status" id="project-status"><h1>Project status</h1></a>
 <p>At the current moment, the project is under heavy development, and the architecture described in the <a href="introduction/overview.html">overview</a> is not covered completely by the deployed devnet. Below we have listed features that were already rolled out:</p>
