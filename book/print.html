@@ -78,7 +78,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="quickstart/index.html"><strong aria-hidden="true">2.</strong> Quick start</a></li><li><ol class="section"><li><a href="quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend app</a></li><li><a href="quickstart/publish.html"><strong aria-hidden="true">2.2.</strong> Publishing the backend app</a></li><li><a href="quickstart/web.html"><strong aria-hidden="true">2.3.</strong> Developing the web app</a></li><li><a href="quickstart/recap.html"><strong aria-hidden="true">2.4.</strong> Recap</a></li></ol></li><li><a href="backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="backend/sdk.html"><strong aria-hidden="true">3.1.</strong> SDK overview</a></li><li><a href="backend/best_practices.html"><strong aria-hidden="true">3.2.</strong> Best practices</a></li><li><a href="backend/internals.html"><strong aria-hidden="true">3.3.</strong> Internals</a></li></ol></li><li><a href="nodes.html"><strong aria-hidden="true">4.</strong> Running Fluence nodes</a></li><li><a href="cli.html"><strong aria-hidden="true">5.</strong> Command-line interface</a></li><li><a href="examples.html"><strong aria-hidden="true">6.</strong> Key examples</a></li><li><a href="project.html"><strong aria-hidden="true">7.</strong> Project status</a></li></ol>
+            <ol class="chapter"><li><a href="introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="quickstart/index.html"><strong aria-hidden="true">2.</strong> Quickstart</a></li><li><ol class="section"><li><a href="quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend app</a></li><li><a href="quickstart/publish.html"><strong aria-hidden="true">2.2.</strong> Publishing the backend app</a></li><li><a href="quickstart/web.html"><strong aria-hidden="true">2.3.</strong> Developing the web app</a></li><li><a href="quickstart/recap.html"><strong aria-hidden="true">2.4.</strong> Recap</a></li></ol></li><li><a href="backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="backend/sdk.html"><strong aria-hidden="true">3.1.</strong> SDK overview</a></li><li><a href="backend/best_practices.html"><strong aria-hidden="true">3.2.</strong> Best practices</a></li><li><a href="backend/internals.html"><strong aria-hidden="true">3.3.</strong> Internals</a></li></ol></li><li><a href="nodes.html"><strong aria-hidden="true">4.</strong> Running Fluence nodes</a></li><li><a href="cli.html"><strong aria-hidden="true">5.</strong> Command-line interface</a></li><li><a href="examples.html"><strong aria-hidden="true">6.</strong> Key examples</a></li><li><a href="project.html"><strong aria-hidden="true">7.</strong> Project status</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -442,32 +442,31 @@ Let's check it:</p>
 <pre><code class="language-bash">~/hello-world $ ls -lh target/wasm32-unknown-unknown/release/hello_world.wasm
 -rwxr-xr-x  2 user  user  1.4M Feb 11 11:59 target/wasm32-unknown-unknown/release/hello_world.wasm
 </code></pre>
-<a class="header" href="#publishing-your-app" id="publishing-your-app"><h1>Publishing your app</h1></a>
-<p>In Fluence network, app is deployed by uploading the Wasm code to Swarm, and publishing hash-address of the code to the Fluence smart contract.</p>
-<p>It is possible to specify desired cluster size along with the hash-address. Cluster size sets the required number of real-time workers in the cluster hosting the app. Note that app would wait in the queue until there is enough free workers to create a cluster of the desired size.</p>
-<a class="header" href="#connect-to-swarm-and-ethereum-rinkeby" id="connect-to-swarm-and-ethereum-rinkeby"><h2>Connect to Swarm and Ethereum Rinkeby</h2></a>
-<p>To publish a backend app to Fluence network, you need to upload it to Swarm, and then send its location in Swarm to a Fluence smart contract on Ethereum Rinkeby testnet.</p>
+<a class="header" href="#publishing-the-backend-app" id="publishing-the-backend-app"><h1>Publishing the backend app</h1></a>
+<p>In the Fluence network, applications are deployed by uploading WebAssembly code to Swarm, and publishing hashes of the uploaded code to the Fluence smart contract.</p>
+<p>It is also possible to specify the desired cluster size, which sets the required number of real-time workers in the cluster hosting the application. Note that the application might wait in the queue until there are enough free workers to form a cluster of the desired size.</p>
+<a class="header" href="#connecting-to-swarm-and-ethereum-rinkeby-nodes" id="connecting-to-swarm-and-ethereum-rinkeby-nodes"><h2>Connecting to Swarm and Ethereum Rinkeby nodes</h2></a>
 <p>To make sure we're on the same page:</p>
 <ul>
-<li>Swarm is a decentralized file storage.</li>
-<li>Ethereum Rinkeby testnet is one of the many Ethereum networks, but there's no real money in there, so it's safe and can be used for trying out something new.</li>
-<li>Fluence smart contract is what rules the Fluence network and allows users to use it.</li>
+<li>Swarm is a decentralized file storage</li>
+<li>Ethereum Rinkeby is one of Ethereum testnets, which works with toy money</li>
+<li>Fluence smart contract is what rules the Fluence network</li>
 </ul>
-<p>To upload your code to Swarm, you need to have access to one of its nodes. The same with Ethereum, you will need a connection to any Ethereum node on Rinkeby testnet.</p>
-<p><strong>We will use existing Ethereum &amp; Swarm nodes, but if you wish, you can <a href="quickstart/../roles/miner.html">use your own nodes</a> or any other.</strong></p>
+<p>To upload the application code to Swarm, you need to have access to one of Swarm nodes. The same with Ethereum: you need access to any Ethereum node running Rinkeby testnet.</p>
+<p>For your convenience and to make this guide simpler, we use Ethereum and Swarm nodes set up by Fluence Labs, but you can use any other nodes if you wish.</p>
+<p><strong>WARNING! This is not a secure way to connect to Ethereum or Swarm.</strong><br />
+It should not be used in production or in a security-sensitive context.</p>
 <a class="header" href="#registering-an-ethereum-rinkeby-account" id="registering-an-ethereum-rinkeby-account"><h2>Registering an Ethereum Rinkeby account</h2></a>
 <a class="header" href="#via-myetherwalletcom" id="via-myetherwalletcom"><h3>Via myetherwallet.com</h3></a>
-<p>Go to <a href="https://vintage.myetherwallet.com/">MyEtherWallet.com</a>, then select any Rinkeby in the upper right, enter any password, and download the Keystore file. You will find your account address in last part of the keystore filename, e.g:</p>
+<p>Go to <a href="https://vintage.myetherwallet.com/">MyEtherWallet.com</a>, select any Rinkeby in the upper right dropdown, enter any password, and download the Keystore file. You will find your account address in the last part of the Keystore file name, for example:</p>
 <pre>
 UTC--2019-03-03T14-48-59.325Z--<b>e1f9c157b45838ca83cb51b7bdcc6c7a3e56650f</b>
 </pre>
-<a class="header" href="#top-up-account-with-funds" id="top-up-account-with-funds"><h3>Top up account with funds</h3></a>
-<p>There are two main Rinkeby faucets. <a href="https://faucet.rinkeby.io/">This one</a> will give you up to 18 Ether, but it requires you to post an Ethereum address to a social network, <a href="http://rinkeby-faucet.com/">another one</a> gives you ETH right away, but just <code>0.001</code>  ether.</p>
-<p><code>0.001</code> ether is enough for the sake of this tutorial, so you may want to go with the <a href="http://rinkeby-faucet.com/">easier one</a></p>
-<a class="header" href="#installing-fluence-cli" id="installing-fluence-cli"><h2>Installing Fluence CLI</h2></a>
-<p>Creating publish transactions manually is hard and error-prone, so we provide Fluence CLI to make this task easier.</p>
-<p>You can download Fluence CLI from the <a href="https://github.com/fluencelabs/fluence/releases/">latest release</a></p>
-<p>Or in terminal:</p>
+<a class="header" href="#top-up-your-account-with-funds" id="top-up-your-account-with-funds"><h3>Top up your account with funds</h3></a>
+<p>There are two main Rinkeby faucets. <a href="https://faucet.rinkeby.io/">This one</a> gives you up to 18 Ether, but it requires you to post an Ethereum address to a social network. <a href="http://rinkeby-faucet.com/">Another one</a> gives you ETH right away, but just 0.001 Ether – which should be enough for this tutorial.</p>
+<a class="header" href="#installing-the-fluence-cli" id="installing-the-fluence-cli"><h2>Installing the Fluence CLI</h2></a>
+<p>It is hard to send publication transactions manually, so we provide the Fluence CLI.<br />
+You can download the CLI from the <a href="https://github.com/fluencelabs/fluence/releases/">releases</a> page, or fetch it in the terminal:</p>
 <p><strong>Linux</strong></p>
 <pre><code class="language-bash">~ $ curl -L https://github.com/fluencelabs/fluence/releases/download/v0.1.5/fluence-cli-0.1.5-linux-x64 -o fluence
 </code></pre>
@@ -475,26 +474,22 @@ UTC--2019-03-03T14-48-59.325Z--<b>e1f9c157b45838ca83cb51b7bdcc6c7a3e56650f</b>
 <pre><code class="language-bash">~ $ curl -L https://github.com/fluencelabs/fluence/releases/download/v0.1.5/fluence-cli-0.1.5-mac-x64 -o fluence
 
 </code></pre>
-<p>And finally don't forget to add permission to execute it:</p>
+<p>Don't forget to add permissions to run it:</p>
 <pre><code class="language-bash">~ $ chmod +x ./fluence
 
-# check CLI is working
+# check that the CLI is working
 ~ $ ./fluence --version
 Fluence CLI 0.1.5
 </code></pre>
-<p>If you see CLI version, proceed to the next step.</p>
-<a class="header" href="#publishing-via-fluence-cli" id="publishing-via-fluence-cli"><h2>Publishing via Fluence CLI</h2></a>
-<p>As was mentioned before, you will need a connection to Ethereum Rinkeby network, and a connection to Swarm network.</p>
-<p>For your convenience, and to make this guide simple, we use addresses of existing Ethereum Rinkeby and Swarm nodes running in a cloud on Fluence nodes. <strong>However, this is a centralized way to connect to Ethereum Rinkeby and Swarm networks, and shouldn't be used in production or in a security-sensitive context.</strong> You may use <strong>any</strong> Rinkeby and Swarm nodes by providing their URIs within <code>--eth_url</code> and <code>--swarm_url</code> options (see below).</p>
-<p>Also you will need a Rinkeby account with some money on it (you can <a href="https://faucet.rinkeby.io/">get money from faucet</a>) and it's private key. Private key can be either a hex string or a <a href="quickstart/../cli/README.html#keystore-json-file">JSON keystore file</a>.</p>
-<p>To interact with Fluence CLI, first of all, we will need to setup CLI to avoid input same arguments in all commands.</p>
+<a class="header" href="#publishing-the-application-with-the-fluence-cli" id="publishing-the-application-with-the-fluence-cli"><h2>Publishing the application with the Fluence CLI</h2></a>
+<p>As we have already mentioned, you need to have access to the Ethereum Rinkeby and Swarm networks. You can either use Ethereum and Swarm nodes set up by Fluence Labs, or specify other nodes by providing their URIs using <code>--eth_url</code> and <code>--swarm_url</code> options.</p>
+<p>You also need a Rinkeby account with some money on it (you can <a href="https://faucet.rinkeby.io/">get Ethers from faucet</a>) and its private key, which can either be a hex string or a <a href="quickstart/../cli.html#keystore-json-file">Keystore file</a>.</p>
+<p>To interact with the Fluence CLI, we will set it up first:</p>
 <pre><code class="language-bash">~ $ ./fluence setup
 </code></pre>
-<p>This command will ask you to enter Fluence contract address, Swarm and Ethereum node addresses, account credentials. It will create a config file, that will be used in all future commands.
-By default, our Swarm and Ethereum node addresses will be used.
-Note that you need only secret key OR keystore path and password to have correct credentials and able to sign transactions to Ethereum.
-There is more info on using keystore files with Fluence CLI in its <a href="quickstart/../cli/README.html#keystore-json-file">README</a>.</p>
-<p>Having all that, you're now ready to publish your app. Examples below will specify a cluster size of 4 nodes for your app. Adjust it to your needs.</p>
+<p>This command will ask you to enter the Fluence contract address, Swarm and Ethereum node addresses, and, finally, your account credentials. It will create the config file which will be used by the CLI tool in the future.</p>
+<p>By default, Swarm and Ethereum nodes controlled by Fluence Labs will be used. Note that you need to provide either the secret key <strong>or</strong> the Keystore file path + password to be able to send transactions to Ethereum.</p>
+<p>Having all that, now you are ready to publish your application:</p>
 <pre><code class="language-bash">~ $ ./fluence publish \
             --code_path        ~/hello-world/target/wasm32-unknown-unknown/release/hello_world.wasm \
             --gas_price        10 \
@@ -502,7 +497,7 @@ There is more info on using keystore files with Fluence CLI in its <a href="quic
             --wait_syncing \
             --wait
 </code></pre>
-<p>After running the command, you will see an output similar to the following:</p>
+<p>Once the command completes, you should see an output similar to the following:</p>
 <pre><code class="language-bash">[1/3]   Application code uploaded. ---&gt; [00:00:00]
 swarm hash: 0xf5c604478031e9a658551220da3af1f086965b257e7375bbb005e0458c805874
 [2/3]   Transaction publishing app was sent. ---&gt; [00:00:03]
@@ -512,12 +507,12 @@ App deployed.
   app id: 2
   tx hash: 0x5552ee8f136bce0b020950676d84af00e4016490b8ee8b1c51780546ad6016b7
 </code></pre>
-<a class="header" href="#check-app-in-the-smart-contract" id="check-app-in-the-smart-contract"><h2>Check app in the smart contract</h2></a>
-<p>To see how smart contract sees your app, and what nodes it was deployed onto, you can use <code>status</code> like this:</p>
+<a class="header" href="#verifying-the-application-status" id="verifying-the-application-status"><h2>Verifying the application status</h2></a>
+<p>To check the state of your application – for example, which nodes it was deployed to, run:</p>
 <pre><code class="language-bash">~ $ ./fluence status \
             --app_id           &lt;your app id here&gt;
 </code></pre>
-<p>The output will be in JSON, and look similar to the following:</p>
+<p>The output will be in JSON, and should look similar to the following:</p>
 <pre><code class="language-json">{
   &quot;apps&quot;: [
     {
@@ -557,54 +552,50 @@ App deployed.
   ]
 }
 </code></pre>
-<p>You can also use interactive mode instead of default by supplying <code>--interactive</code> flag:</p>
-<pre><code class="language-bash">./fluence status \
-            --app_id           &lt;your app id here&gt; \
-            --interactive
-</code></pre>
-<div style="text-align:center">
-<img src="../images/interactive.png" width="776px"/>
-<br>
-</div>
-<p>You can press <code>q</code> to exit it.</p>
-<p>Your backend now is successfully deployed! You can proceed to access your code from a web browser.</p>
-<a class="header" href="#frontend" id="frontend"><h1>Frontend</h1></a>
-<p>For this part, you will need installed <code>npm</code>. Please refer to <a href="https://www.npmjs.com/get-npm">npm docs</a> for installation instructions.</p>
-<a class="header" href="#preparing-web-app" id="preparing-web-app"><h2>Preparing web app</h2></a>
+<p>The backend application should be successfully deployed now!</p>
+<a class="header" href="#developing-the-web-app" id="developing-the-web-app"><h1>Developing the web app</h1></a>
+<p>For this part, you need installed <code>npm</code>. Please refer to <a href="https://www.npmjs.com/get-npm">npm docs</a> for installation instructions.</p>
+<a class="header" href="#preparing-web-application" id="preparing-web-application"><h2>Preparing web application</h2></a>
 <p>Let's clone a simple web app template:</p>
 <pre><code class="language-bash">~ $ git clone https://github.com/fluencelabs/frontend-template
 ~ $ cd frontend-template
 ~/frontend-template $ 
 </code></pre>
-<p>There are just three files (except for README, LICENSE and .gitignore):</p>
+<p>Inside you should find:</p>
 <ul>
-<li><code>package.json</code> that declares needed dependencies</li>
-<li><code>webpack.config.js</code> needed for the webpack to work</li>
-<li><code>index.js</code> that imports <code>fluence</code> js library and shows how to connect to a cluster</li>
+<li><code>package.json</code> which adds required dependencies</li>
+<li><code>webpack.config.js</code> which is needed for the webpack to work</li>
+<li><code>index.js</code> which demonstrates how to interact with the real-time cluster</li>
 </ul>
-<p><code>fluence</code> js library is an SDK, that can take cluster entry points from Ethereum smart contract with <code>connect</code> method and invoke commands to a cluster by method <code>invoke</code>.</p>
+<p>The template web application uses the Fluence frontend SDK. This SDK allows to locate the real-time cluster with the help of the Fluence smart contract, and then send transactions to this cluster.</p>
 <p>Let's take a look at <code>index.js</code>:</p>
 <pre><code class="language-javascript">
-// address of the Fluence smart contract on Ethereum.
+// the address of the Fluence smart contract on Ethereum
 let contractAddress = &quot;0x074a79f29c613f4f7035cec582d0f7e4d3cda2e7&quot;;
 
-// Address of the Ethereum node. If set to `undefined`, MetaMask will be used to send transactions.
+// the address of the Ethereum node
+// MetaMask is used to send transactions if this address is set to `undefined`, 
 let ethUrl = &quot;http://207.154.240.52:8545/&quot;;
 
-// appId of the backend as seen in Fluence smart contract.
+// the backend appId as seen in the Fluence smart contract
 let appId = &quot;6&quot;;
+
 ...
-// create a session between client and backend application
+
+// create a session between the frontend client and the backend application
+// the session is used to send transactions to the real-time cluster
 fluence.connect(contractAddress, appId, ethUrl).then((s) =&gt; {
   console.log(&quot;Session created&quot;);
   window.session = s;
   helloBtn.disabled = false;
 });
+
 ...
-// set callback on button click
+
+// set a callback on the button click
 helloBtn.addEventListener(&quot;click&quot;, send)
 
-// send username as a transaction and display results in grettingLbl
+// send a transaction with the name to the real-time cluster and display the response
 function send() {
   const username = usernameInput.value.trim();
   let result = session.invoke(username);
@@ -613,11 +604,9 @@ function send() {
   });
 }
 </code></pre>
-<p>This code creates a session, and saves it to <code>window.session</code>, so it can be used later.</p>
-<p>Then, it assigns <code>send()</code> function on the button, which will call the <code>invoke</code> method. <code>invoke</code> takes a string from an input, and sends it to the backend as a transaction. The result will be displayed in a greeting label.</p>
-<a class="header" href="#running-and-using" id="running-and-using"><h2>Running and using</h2></a>
-<p>Please make sure you have changed <code>appId</code> to the appId of existing backend. If you haven't published your backend yet, please take a look at <a href="quickstart/publish.html">Publishing guide</a>. You can also use backends published by other people, take a look at</p>
-<p>To install all dependencies, compile and run the application, run in the terminal:</p>
+<a class="header" href="#running-the-web-application" id="running-the-web-application"><h2>Running the web application</h2></a>
+<p>Make sure that you have changed the <code>appId</code> variable to the identifier of the deployed backend!</p>
+<p>To install dependencies, and compile and run your web application, run:</p>
 <pre><code class="language-bash">~/frontend-template $ npm install
 ~/frontend-template $ npm run start
 &gt; frontend-template@1.0.0 start /private/tmp/frontend-template
@@ -626,38 +615,36 @@ function send() {
 ℹ ｢wds｣: Project is running at http://localhost:8080/
 ...
 </code></pre>
-<p>Now you can open http://localhost:8080/ in your browser. You will see an input text box and a disabled button. Button will become enabled once AppSession is created. You can enter your name, and press <code>Say hello!</code> button, and greeting will be displayed next to <code>Result:</code>.</p>
-<p>You can also open Developer Console, and you'll see a log about session creation:</p>
+<p>Now you can open <a href="http://localhost:8080/">http://localhost:8080/</a> in your browser. You should see an input text element and a disabled button, which should become enabled once the session with the backend is initialized.</p>
+<div style="text-align:center">
+<kbd>
+<img src="../images/helloworld.png" width="610px"/>
+</kbd>
+<br><br>
+</div>
+<p>You can also open the developer console, and check out the Fluence SDK logs:</p>
 <pre><code>...
 Connecting web3 to http://207.154.232.92:8545
 ...
 Session created
 </code></pre>
-<div style="text-align:center">
-<kbd>
-<img src="../images/helloworld.png" width="529px"/>
-</kbd>
-<br><br><br>
-</div>
-<p>You can also use Fluence from within Developer console as follows:</p>
-<pre><code class="language-javascript">let result = session.invoke(&quot;myName&quot;);
+<p>You can also interact with the backend application from the developer console:</p>
+<pre><code class="language-javascript">let result = session.invoke(&quot;MyName&quot;);
 &lt;undefined&gt;
 logResultAsString(result);
 &lt;undefined&gt;
-Hello, world! From user myName
+Hello, world! -- MyName
 </code></pre>
-<a class="header" href="#wrapping-up" id="wrapping-up"><h1>Wrapping up</h1></a>
-<p>Thanks for finishing quick start guide!</p>
+<a class="header" href="#recap" id="recap"><h1>Recap</h1></a>
+<p>Thanks for finishing the quickstart guide!</p>
 <p>A short recap of what you have developed and learned:</p>
 <ul>
-<li>Set up a Rust and Node.js environments from zero to compiling Webassembly backend and a working web application.</li>
-<li>Start with Rust basics, and end up using complex procedural macros and processing user input.</li>
-<li>Interact with Ethereum and alter Fluence network state.</li>
-<li>Spin up real decentralized backend on top of miners' machines, and integrate JavaScript web app with that backend.</li>
+<li>How to set up Rust and Node.js environments from scratch.</li>
+<li>How to interact with Ethereum and Swarm through the Fluence CLI.</li>
+<li>How to spin up a decentralized backend running in the Fluence network, and build frontend applications interacting with this backend.</li>
 </ul>
-<p>Hope this was fun. If you experienced any problems with this guide or Fluence, or just want to chat with the team, feel free to join our <a href="https://discordapp.com/invite/AjfbDKQ">Discord</a>!</p>
-<p>If you want to do more with Fluence, you can help us out by looking at <a href="quickstart/../unsolved.html">open problems</a> or <a href="https://github.com/fluencelabs/fluence/issues">open issues</a>, and give us some feedback.</p>
-<p>Also, there are more examples of <a href="TODO">backends</a> and <a href="TODO">web apps</a>, take a look.</p>
+<p>Hope this was fun!</p>
+<p>Join our <a href="https://discordapp.com/invite/AjfbDKQ">Discord</a> if you have any feedback, questions, or ideas what could be built with Fluence :)</p>
 <a class="header" href="#backend-guide" id="backend-guide"><h1>Backend guide</h1></a>
 <p>Backend applications deployed to Fluence nodes are usually composed of two logical parts. The first part is the domain logic code produced by a developer. The second part is the Fluence SDK, which is responsible for accepting transactions, finding the right domain function to call, invoking this function and returning results back to the state machine.</p>
 <div style="text-align:center">
