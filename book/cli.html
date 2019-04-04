@@ -183,7 +183,7 @@
 <a class="header" href="#fluence-cli" id="fluence-cli"><h2>Fluence CLI</h2></a>
 <p>Fluence CLI is an automation tool for tasks of app management (deployment and deletion), computation resource sharing (node registration), and monitoring Fluence network state (status). See usage for more info.</p>
 <a class="header" href="#requirements" id="requirements"><h2>Requirements</h2></a>
-<p>CLI assumes running Ethereum and Swarm on <code>http://data.fluence.one:8545/</code> and <code>http://data.fluence:8500/</code> respectively. Use <code>--eth_url</code> and <code>--swarm_url</code> to specify actual addresses as you need.</p>
+<p>CLI assumes running Ethereum and Swarm on <code>http://data.fluence.one:8545/</code> and <code>http://data.fluence:8500/</code> respectively. Use <code>--eth_url</code> and <code>--storage_url</code> to specify actual addresses as you need.</p>
 <p>Please note, that your Ethereum account should have sufficient funds for issuing transactions to smart-contract. It's only for transaction fees, Fluence itself doesn't currently charge miners or developers. That could change in the future, for example when miners' deposits are implemented.</p>
 <p>Also, take a look at <a href="../tools/deploy/README.html">deployment scripts</a>, they will assist you in running Swarm, Ethereum and Fluence nodes.</p>
 <a class="header" href="#installation" id="installation"><h2>Installation</h2></a>
@@ -205,7 +205,7 @@
 <p>Contract address, Ethereum, and Swarm node addresses have defaults, but account address and credentials (secret key or Ethereum keystore and password) should be filled for correct transaction sending.
 Arguments description and examples:</p>
 <ul>
-<li><code>0x074a79f29c613f4f7035cec582d0f7e4d3cda2e7</code> is a contract address, register transaction will be sent there</li>
+<li><code>0xeFF91455de6D4CF57C141bD8bF819E5f873c1A01</code> is a contract address, register transaction will be sent there</li>
 <li><code>http://data.fluence.one:8545</code> is an URL to Ethereum node</li>
 <li><code>http://data.fluence.one:8500</code> is an URL to Swarm node</li>
 <li><code>0x4180fc65d613ba7e1a385181a219f1dbfe7bf11d</code> will be used as Ethereum account for issuing transactions. <em>Use your Ethereum account here</em></li>
@@ -384,7 +384,7 @@ App enqueued.
 <p>There is a flag <code>--contract_address</code> to use all commands to interact with non-default Fluence smart contract. You can deploy <a href="../bootstrap/contracts/Network.sol">Fluence contract</a> on your own and use CLI like this:</p>
 <pre><code class="language-bash">./fluence &lt;command&gt;
             ...
-            --contract_address 0x074a79f29c613f4f7035cec582d0f7e4d3cda2e7 \
+            --contract_address 0xeFF91455de6D4CF57C141bD8bF819E5f873c1A01 \
             ...
 </code></pre>
 <a class="header" href="#interactive-status" id="interactive-status"><h3>Interactive status</h3></a>

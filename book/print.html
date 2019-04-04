@@ -484,7 +484,7 @@ You can download the CLI from the <a href="https://github.com/fluencelabs/fluenc
 Fluence CLI 0.1.5
 </code></pre>
 <a class="header" href="#publishing-the-application-with-the-fluence-cli" id="publishing-the-application-with-the-fluence-cli"><h2>Publishing the application with the Fluence CLI</h2></a>
-<p>As we have already mentioned, you need to have access to the Ethereum Rinkeby and Swarm networks. You can either use Ethereum and Swarm nodes set up by Fluence Labs, or specify other nodes by providing their URIs using <code>--eth_url</code> and <code>--swarm_url</code> options.</p>
+<p>As we have already mentioned, you need to have access to the Ethereum Rinkeby and Swarm networks. You can either use Ethereum and Swarm nodes set up by Fluence Labs, or specify other nodes by providing their URIs using <code>--eth_url</code> and <code>--storage_url</code> options.</p>
 <p>You also need a Rinkeby account with some money on it (you can <a href="https://faucet.rinkeby.io/">get Ethers from faucet</a>) and its private key, which can either be a hex string or a <a href="quickstart/../cli.html#keystore-json-file">Keystore file</a>.</p>
 <p>To interact with the Fluence CLI, we will set it up first:</p>
 <pre><code class="language-bash">./fluence setup
@@ -573,11 +573,11 @@ App deployed.
 <p>Let's take a look at <code>index.js</code>:</p>
 <pre><code class="language-javascript">
 // the address of the Fluence smart contract on Ethereum
-let contractAddress = &quot;0x074a79f29c613f4f7035cec582d0f7e4d3cda2e7&quot;;
+let contractAddress = &quot;0xeFF91455de6D4CF57C141bD8bF819E5f873c1A01&quot;;
 
 // the address of the Ethereum node
 // MetaMask is used to send transactions if this address is set to `undefined`, 
-let ethUrl = &quot;http://207.154.240.52:8545/&quot;;
+let ethUrl = &quot;http://data.fluence.one:8545/&quot;;
 
 // the backend appId as seen in the Fluence smart contract
 let appId = &quot;6&quot;;
@@ -1012,7 +1012,7 @@ env.user = &quot;root&quot;
 <pre><code class="language-bash">$ fab deploy
 </code></pre>
 <p>At the end of the successful deployment you should see something like the following:</p>
-<pre><code>[53.42.31.20] out: CONTRACT_ADDRESS=0x074a79f29c613f4f7035cec582d0f7e4d3cda2e7
+<pre><code>[53.42.31.20] out: CONTRACT_ADDRESS=0xeFF91455de6D4CF57C141bD8bF819E5f873c1A01
 [53.42.31.20] out: NAME=fluence-node-1
 [53.42.31.20] out: HOST_IP=53.42.31.20
 [53.42.31.20] out: EXTERNAL_HOST_IP=53.42.31.20
@@ -1249,7 +1249,7 @@ env.user = &quot;root&quot;
 <a class="header" href="#fluence-cli" id="fluence-cli"><h2>Fluence CLI</h2></a>
 <p>Fluence CLI is an automation tool for tasks of app management (deployment and deletion), computation resource sharing (node registration), and monitoring Fluence network state (status). See usage for more info.</p>
 <a class="header" href="#requirements" id="requirements"><h2>Requirements</h2></a>
-<p>CLI assumes running Ethereum and Swarm on <code>http://data.fluence.one:8545/</code> and <code>http://data.fluence:8500/</code> respectively. Use <code>--eth_url</code> and <code>--swarm_url</code> to specify actual addresses as you need.</p>
+<p>CLI assumes running Ethereum and Swarm on <code>http://data.fluence.one:8545/</code> and <code>http://data.fluence:8500/</code> respectively. Use <code>--eth_url</code> and <code>--storage_url</code> to specify actual addresses as you need.</p>
 <p>Please note, that your Ethereum account should have sufficient funds for issuing transactions to smart-contract. It's only for transaction fees, Fluence itself doesn't currently charge miners or developers. That could change in the future, for example when miners' deposits are implemented.</p>
 <p>Also, take a look at <a href="../tools/deploy/README.html">deployment scripts</a>, they will assist you in running Swarm, Ethereum and Fluence nodes.</p>
 <a class="header" href="#installation" id="installation"><h2>Installation</h2></a>
@@ -1271,7 +1271,7 @@ env.user = &quot;root&quot;
 <p>Contract address, Ethereum, and Swarm node addresses have defaults, but account address and credentials (secret key or Ethereum keystore and password) should be filled for correct transaction sending.
 Arguments description and examples:</p>
 <ul>
-<li><code>0x074a79f29c613f4f7035cec582d0f7e4d3cda2e7</code> is a contract address, register transaction will be sent there</li>
+<li><code>0xeFF91455de6D4CF57C141bD8bF819E5f873c1A01</code> is a contract address, register transaction will be sent there</li>
 <li><code>http://data.fluence.one:8545</code> is an URL to Ethereum node</li>
 <li><code>http://data.fluence.one:8500</code> is an URL to Swarm node</li>
 <li><code>0x4180fc65d613ba7e1a385181a219f1dbfe7bf11d</code> will be used as Ethereum account for issuing transactions. <em>Use your Ethereum account here</em></li>
@@ -1450,7 +1450,7 @@ App enqueued.
 <p>There is a flag <code>--contract_address</code> to use all commands to interact with non-default Fluence smart contract. You can deploy <a href="../bootstrap/contracts/Network.sol">Fluence contract</a> on your own and use CLI like this:</p>
 <pre><code class="language-bash">./fluence &lt;command&gt;
             ...
-            --contract_address 0x074a79f29c613f4f7035cec582d0f7e4d3cda2e7 \
+            --contract_address 0xeFF91455de6D4CF57C141bD8bF819E5f873c1A01 \
             ...
 </code></pre>
 <a class="header" href="#interactive-status" id="interactive-status"><h3>Interactive status</h3></a>
