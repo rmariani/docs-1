@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Internals - The Fluence book</title>
+        <title>Decentralized website on FLuence+IPFS - The Fluence book</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -78,7 +78,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="../introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="../introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="../introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="../quickstart/index.html"><strong aria-hidden="true">2.</strong> Quickstart</a></li><li><ol class="section"><li><a href="../quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend app on Rust</a></li><li><a href="../quickstart/backend-assemblyscript.html"><strong aria-hidden="true">2.2.</strong> Developing the backend app on AssemblyScript</a></li><li><a href="../quickstart/ipfs-website.html"><strong aria-hidden="true">2.3.</strong> Decentralized website on FLuence+IPFS</a></li><li><a href="../quickstart/publish.html"><strong aria-hidden="true">2.4.</strong> Publishing the backend app</a></li><li><a href="../quickstart/web.html"><strong aria-hidden="true">2.5.</strong> Developing the web app</a></li><li><a href="../quickstart/recap.html"><strong aria-hidden="true">2.6.</strong> Recap</a></li></ol></li><li><a href="../backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="../backend/sdk.html"><strong aria-hidden="true">3.1.</strong> SDK overview</a></li><li><a href="../backend/best_practices.html"><strong aria-hidden="true">3.2.</strong> Best practices</a></li><li><a href="../backend/internals.html" class="active"><strong aria-hidden="true">3.3.</strong> Internals</a></li></ol></li><li><a href="../nodes.html"><strong aria-hidden="true">4.</strong> Running Fluence nodes</a></li><li><a href="../cli.html"><strong aria-hidden="true">5.</strong> Command-line interface</a></li><li><a href="../examples.html"><strong aria-hidden="true">6.</strong> Key examples</a></li><li><a href="../project.html"><strong aria-hidden="true">7.</strong> Project status</a></li></ol>
+            <ol class="chapter"><li><a href="../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="../introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="../introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="../introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="../quickstart/index.html"><strong aria-hidden="true">2.</strong> Quickstart</a></li><li><ol class="section"><li><a href="../quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend app on Rust</a></li><li><a href="../quickstart/backend-assemblyscript.html"><strong aria-hidden="true">2.2.</strong> Developing the backend app on AssemblyScript</a></li><li><a href="../quickstart/ipfs-website.html" class="active"><strong aria-hidden="true">2.3.</strong> Decentralized website on FLuence+IPFS</a></li><li><a href="../quickstart/publish.html"><strong aria-hidden="true">2.4.</strong> Publishing the backend app</a></li><li><a href="../quickstart/web.html"><strong aria-hidden="true">2.5.</strong> Developing the web app</a></li><li><a href="../quickstart/recap.html"><strong aria-hidden="true">2.6.</strong> Recap</a></li></ol></li><li><a href="../backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="../backend/sdk.html"><strong aria-hidden="true">3.1.</strong> SDK overview</a></li><li><a href="../backend/best_practices.html"><strong aria-hidden="true">3.2.</strong> Best practices</a></li><li><a href="../backend/internals.html"><strong aria-hidden="true">3.3.</strong> Internals</a></li></ol></li><li><a href="../nodes.html"><strong aria-hidden="true">4.</strong> Running Fluence nodes</a></li><li><a href="../cli.html"><strong aria-hidden="true">5.</strong> Command-line interface</a></li><li><a href="../examples.html"><strong aria-hidden="true">6.</strong> Key examples</a></li><li><a href="../project.html"><strong aria-hidden="true">7.</strong> Project status</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -143,131 +143,36 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#backend-internals" id="backend-internals"><h1>Backend internals</h1></a>
-<a class="header" href="#application-interface" id="application-interface"><h2>Application interface</h2></a>
-<p>A backend application is allowed to consist of more than one WebAssembly module (provided they have different names), but only one of those modules can be called by the state machine. Note that this module <strong>should not</strong> have the module name section. Additionally, every backend application that is going to be deployed to the Fluence network is <strong>expected to</strong> export three functions – <code>invoke()</code>, <code>allocate()</code>, and <code>deallocate()</code>:</p>
-<pre><code class="language-Rust">#[no_mangle]
-pub unsafe fn invoke(ptr: *mut u8, len: usize) -&gt; usize {
-    ...
-}
-
-#[no_mangle]
-pub unsafe fn allocate(size: usize) -&gt; NonNull&lt;u8&gt; {
-    ...
-}
-
-#[no_mangle]
-pub unsafe fn deallocate(ptr: *mut u8, size: usize) {
-    ...
-}
+                        <a class="header" href="#website-with-fluence-backend-and-static-resources-on-ipfs" id="website-with-fluence-backend-and-static-resources-on-ipfs"><h1>Website with Fluence backend and static resources on IPFS</h1></a>
+<a class="header" href="#motivation" id="motivation"><h2>Motivation</h2></a>
+<p>Fluence nodes are stateful but it is wasteful to store website (or something else) static resources on them. We can use decentralized storage like IPFS to store static resources and save the decentralized state of the whole system.</p>
+<a class="header" href="#requirements" id="requirements"><h2>Requirements</h2></a>
+<ul>
+<li><a href="https://docs.ipfs.io/introduction/install/">IPFS CLI</a> to upload resources</li>
+</ul>
+<a class="header" href="#how-to" id="how-to"><h2>How To</h2></a>
+<p>First of all, we need already written frontend interacting with Fluence nodes.</p>
+<p>And then let's upload directory with frontend code:</p>
+<pre><code>IPFS_ADDR=$(host data.fluence.one | awk '/has address/ { print $4 }')
+ipfs --api /ip4/$IPFS_ADDR/tcp/5001 add -r build/
 </code></pre>
-<p>Note that <code>#[no_mangle]</code> and <code>pub unsafe</code> signature parts force these functions to be exported by WebAssembly (refer to this <a href="https://internals.rust-lang.org/t/precise-semantics-of-no-mangle/4098">discussion</a> for more info). In <em>wast</em> format, these functions are expected to have the following signatures:</p>
-<pre><code>(func (export &quot;invoke&quot;) (param $buffer i32) (param $size i32) (result i32))
-
-(func (export &quot;allocate&quot;) (param $size i32) (result i32))
-
-(func (export &quot;deallocate&quot;) (param $address i32) (param $size i32) (return))
-</code></pre>
-<p>The <code>invoke()</code> function is the main entry point to the deployed application. It takes two <code>i32</code> params – a pointer to the byte array stored in the WebAssembly memory and the byte array size. If the state machine needs to call the <code>invoke()</code> function with no arguments, it passes two null values for the pointer and the size argument. To return the result, the <code>invoke()</code> function returns a pointer to the WebAssembly memory region where the first 4 bytes represent the size of the result buffer, and the next <code>size</code> bytes represent the result buffer itself.</p>
-<p>The <code>allocate()</code> function is responsible for allocating a region of memory where the state machine can write the data which should be passed to the application. Once the region is allocated, the application should not overwrite it until a corresponding <code>deallocate()</code> call is made. The <code>allocate()</code> function takes an <code>i32</code> parameter which specifies the size of the region, and returns a pointer to the allocated region in the WebAssembly memory.</p>
-<p>The <code>deallocate()</code> function is responsible for memory deallocation. It takes two <code>i32</code> arguments – the address of the memory region that should be deallocated and its size.</p>
-<a class="header" href="#request-response-lifecycle" id="request-response-lifecycle"><h2>Request-response lifecycle</h2></a>
-<p>Once the state machine receives a transaction block, it forwards each transaction to the backend application and awaits results of its execution. The transaction processing lifecycle can be described as follows:</p>
-<ol>
-<li>
-<p>The state machine calls the <code>allocate()</code> function exported by the application and passes to it the size of the memory region that the backend application should allocate for the input. The  <code>allocate()</code> function returns the offset in the WebAssembly memory where the input should be written to.</p>
-</li>
-<li>
-<p>The state machine writes the input at the offset returned by the <code>allocate()</code> function.</p>
-</li>
-<li>
-<p>The state machine calls the <code>invoke()</code> function exported by the application and passes to it the offset where the input was written to and the size of the input in bytes.</p>
-</li>
-<li>
-<p>The state machine synchronously waits for the <code>invoke()</code> function to complete. The <code>invoke()</code> function returns a pointer to the WebAssembly memory region storing the returned result. The state machine reads the returned result and caches it before sending back to the client.</p>
-</li>
-<li>
-<p>The state machine uses the <code>deallocate()</code> function exported by the application to free WebAssembly memory regions used to store input and output data.</p>
-</li>
-</ol>
-<a class="header" href="#unmanaged-application-example" id="unmanaged-application-example"><h2>Unmanaged application example</h2></a>
-<p>Here is how a simple <a href="https://github.com/fluencelabs/tutorials/tree/master/hello-world/app-nosdk-rust-2018">hello world</a> application can be implemented without the Fluence SDK:</p>
-<pre><code class="language-Rust">#![feature(allocator_api)]
-
-use std::alloc::{Alloc, Global, Layout};
-use std::mem;
-use std::num::NonZeroUsize;
-use std::ptr::{self, NonNull};
-
-#[no_mangle]
-pub unsafe fn invoke(ptr: *mut u8, len: usize) -&gt; NonNull&lt;u8&gt; {
-    let raw_string = Vec::from_raw_parts(ptr, len, len);
-    let user_name = String::from_utf8(raw_string).unwrap();
-
-    let result = format!(&quot;Hello, world! -- {}&quot;, user_name);
-    const RESULT_SIZE_BYTES: usize = 4;
-
-    let result_len = result.len();
-    let total_len = result_len
-        .checked_add(RESULT_SIZE_BYTES)
-        .expect(&quot;usize overflow occurred&quot;);
-
-    // converts array size to bytes in little-endian
-    let len_as_bytes: [u8; RESULT_SIZE_BYTES] = mem::transmute((result_len as u32).to_le());
-
-    // allocates a new memory region for the result
-    let result_ptr = allocate(total_len);
-
-    // copies length of array to memory
-    ptr::copy_nonoverlapping(
-        len_as_bytes.as_ptr(),
-        result_ptr.as_ptr(),
-        RESULT_SIZE_BYTES,
-    );
-
-    // copies array to memory
-    ptr::copy_nonoverlapping(
-        result.as_ptr(),
-        result_ptr.as_ptr().add(RESULT_SIZE_BYTES),
-        result_len,
-    );
-
-    result_ptr
-}
-
-#[no_mangle]
-pub unsafe fn allocate(size: usize) -&gt; NonNull&lt;u8&gt; {
-    let non_zero_size =
-        NonZeroUsize::new(size).expect(&quot;[Error]: allocation of zero bytes is not allowed.&quot;);
-    let layout: Layout = Layout::from_size_align(non_zero_size.get(), mem::align_of::&lt;u8&gt;())
-        .unwrap_or_else(|_| panic!(&quot;[Error]: layout creation failed while allocation&quot;));
-    Global
-        .alloc(layout)
-        .unwrap_or_else(|_| panic!(&quot;[Error]: allocation of {} bytes failed&quot;, size))
-}
-
-#[no_mangle]
-pub unsafe fn deallocate(ptr: NonNull&lt;u8&gt;, size: usize) {
-    let non_zero_size =
-        NonZeroUsize::new(size).expect(&quot;[Error]: deallocation of zero bytes is not allowed.&quot;);
-    let layout = Layout::from_size_align(non_zero_size.get(), mem::align_of::&lt;u8&gt;())
-        .unwrap_or_else(|_| panic!(&quot;[Error]: layout creation failed while deallocation&quot;));;
-    Global.dealloc(ptr, layout);
-}
-</code></pre>
+<p><code>IPFS_ADDR</code> - is a data.fluence.one ip address</p>
+<p>This command will return a hash of directory. We can check if the directory is uploaded by opening a link with this hash: <code>http://data.fluence.one:8080/ipfs/&lt;IpfsHash&gt;</code></p>
+<p>That's it! Now your frontend code is available with this link: <code>http://data.fluence.one:8080/ipfs/&lt;IpfsHash&gt;/index.html</code></p>
+<p>Note, that your entrypoint is not <code>index.html</code>, change the link to right one. </p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../backend/best_practices.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../quickstart/backend-assemblyscript.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../nodes.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../quickstart/publish.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -279,13 +184,13 @@ pub unsafe fn deallocate(ptr: NonNull&lt;u8&gt;, size: usize) {
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="../backend/best_practices.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="../quickstart/backend-assemblyscript.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="../nodes.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="../quickstart/publish.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

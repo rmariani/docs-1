@@ -78,7 +78,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="quickstart/index.html"><strong aria-hidden="true">2.</strong> Quickstart</a></li><li><ol class="section"><li><a href="quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend app</a></li><li><a href="quickstart/publish.html"><strong aria-hidden="true">2.2.</strong> Publishing the backend app</a></li><li><a href="quickstart/web.html"><strong aria-hidden="true">2.3.</strong> Developing the web app</a></li><li><a href="quickstart/recap.html"><strong aria-hidden="true">2.4.</strong> Recap</a></li></ol></li><li><a href="backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="backend/sdk.html"><strong aria-hidden="true">3.1.</strong> SDK overview</a></li><li><a href="backend/best_practices.html"><strong aria-hidden="true">3.2.</strong> Best practices</a></li><li><a href="backend/internals.html"><strong aria-hidden="true">3.3.</strong> Internals</a></li></ol></li><li><a href="nodes.html"><strong aria-hidden="true">4.</strong> Running Fluence nodes</a></li><li><a href="cli.html"><strong aria-hidden="true">5.</strong> Command-line interface</a></li><li><a href="examples.html"><strong aria-hidden="true">6.</strong> Key examples</a></li><li><a href="project.html"><strong aria-hidden="true">7.</strong> Project status</a></li></ol>
+            <ol class="chapter"><li><a href="introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="quickstart/index.html"><strong aria-hidden="true">2.</strong> Quickstart</a></li><li><ol class="section"><li><a href="quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend app on Rust</a></li><li><a href="quickstart/backend-assemblyscript.html"><strong aria-hidden="true">2.2.</strong> Developing the backend app on AssemblyScript</a></li><li><a href="quickstart/ipfs-website.html"><strong aria-hidden="true">2.3.</strong> Decentralized website on FLuence+IPFS</a></li><li><a href="quickstart/publish.html"><strong aria-hidden="true">2.4.</strong> Publishing the backend app</a></li><li><a href="quickstart/web.html"><strong aria-hidden="true">2.5.</strong> Developing the web app</a></li><li><a href="quickstart/recap.html"><strong aria-hidden="true">2.6.</strong> Recap</a></li></ol></li><li><a href="backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="backend/sdk.html"><strong aria-hidden="true">3.1.</strong> SDK overview</a></li><li><a href="backend/best_practices.html"><strong aria-hidden="true">3.2.</strong> Best practices</a></li><li><a href="backend/internals.html"><strong aria-hidden="true">3.3.</strong> Internals</a></li></ol></li><li><a href="nodes.html"><strong aria-hidden="true">4.</strong> Running Fluence nodes</a></li><li><a href="cli.html"><strong aria-hidden="true">5.</strong> Command-line interface</a></li><li><a href="examples.html"><strong aria-hidden="true">6.</strong> Key examples</a></li><li><a href="project.html"><strong aria-hidden="true">7.</strong> Project status</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -442,6 +442,86 @@ Let's check it:</p>
 <pre><code class="language-bash">~/hello-world $ ls -lh target/wasm32-unknown-unknown/release/hello_world.wasm
 -rwxr-xr-x  2 user  user  1.4M Feb 11 11:59 target/wasm32-unknown-unknown/release/hello_world.wasm
 </code></pre>
+<a class="header" href="#developing-the-backend-app-on-assemblyscript" id="developing-the-backend-app-on-assemblyscript"><h1>Developing the backend app on AssemblyScript</h1></a>
+<p>Let's build Hello World app for Fluence.</p>
+<a class="header" href="#requirements" id="requirements"><h2>Requirements</h2></a>
+<ul>
+<li>installed <code>npm</code></li>
+</ul>
+<a class="header" href="#initialize-project" id="initialize-project"><h2>Initialize project</h2></a>
+<ol>
+<li>Create a new directory for a project</li>
+<li>Run <code>npx fluencelabs/fl-init</code> from directory.</li>
+<li>Wait one minute. Enter 'y' when asked.</li>
+<li>This script will initialize project, that we can already compile to WebAssembly and deploy into Fluence system.</li>
+</ol>
+<a class="header" href="#creating-a-hello-world-backend-for-fluence-1" id="creating-a-hello-world-backend-for-fluence-1"><h2>Creating a Hello World backend for Fluence</h2></a>
+<p>All we need for now is to change <code>handle</code> function in <code>main.ts</code> file:</p>
+<pre><code class="language-js">// main handler for an application
+export function handler(request: string): string {
+  return &quot;&quot;;
+}
+</code></pre>
+<p>Change empty string with <code>return &quot;Hello, &quot; + request + &quot;!&quot;</code> and that's it, the app is ready.</p>
+<a class="header" href="#build-wasm-file" id="build-wasm-file"><h2>Build <code>wasm</code> file</h2></a>
+<ol>
+<li>Run <code>npm run flbuild</code> in the project directory.</li>
+<li>File <code>build/optimized.wasm</code> will be created.</li>
+<li>You can publish this file like in <a href="quickstart/publish.html">Publishing the backend app</a> tutorial.</li>
+</ol>
+<a class="header" href="#advanced" id="advanced"><h2>Advanced</h2></a>
+<p>For deeper understanding let's open <code>assembly/index.ts</code> file. We can see functions, that are gateways from outer VM to written code:</p>
+<pre><code class="language-js">...
+// VM wrapper will put requests to memory through this function
+export function allocate(size: usize) :i32 {
+  return memory.allocate(size);
+}
+
+// VM wrapper will deallocate response from memory after handling it
+export function deallocate(ptr: i32, size: usize): void {
+  memory.free(ptr);
+  // use 'memory.reset()' for reset memory after every request
+}
+
+// VM wrapper calls this function with a pointer on request in memory.
+// Returns pointer on a response.
+export function invoke(ptr: i32, size: i32): i32 {
+    // this function will parse a request as a string and return result string as a pointer in memory
+    // you can look on other functions in 'assemblyscript-sdk' library to handle own types of requests and responses
+    return loggedStringHandler(ptr, size, handler, log);
+}
+</code></pre>
+<p>Function <code>loggedStringHandler</code> in <code>invoke</code> use <code>handler</code> to handle incoming messages and returning response. There are some other methods for interacting with requests and responses in different formats. You can look at them here <a href="https://github.com/fluencelabs/assemblyscript-sdk/blob/master/assembly/index.ts">AssemblyScript SDK</a></p>
+<a class="header" href="#examples" id="examples"><h2>Examples</h2></a>
+<p><a href="https://github.com/fluencelabs/tutorials/tree/master/dice-game/backend-as">Dice game</a>
+<a href="https://github.com/fluencelabs/tutorials/tree/master/dice-game/backend-db-as">Multimodule dice game with connected DB written on Rust</a></p>
+<a class="header" href="#assemblyscript" id="assemblyscript"><h2>AssemblyScript</h2></a>
+<p><a href="https://github.com/AssemblyScript/assemblyscript">AssemblyScript introduction</a></p>
+<a class="header" href="#limitations-of-assemblyscript" id="limitations-of-assemblyscript"><h2>Limitations of AssemblyScript</h2></a>
+<p>It is important to note that AssemblyScript is NOT TypeScript. There are several important features that are missing notably:</p>
+<ul>
+<li>interfaces</li>
+<li>use of untyped variables or the any type</li>
+<li>JSON.parse/JSON.stringify</li>
+<li>virtual methods (the method of the compile time type will always be called)</li>
+</ul>
+<a class="header" href="#website-with-fluence-backend-and-static-resources-on-ipfs" id="website-with-fluence-backend-and-static-resources-on-ipfs"><h1>Website with Fluence backend and static resources on IPFS</h1></a>
+<a class="header" href="#motivation-1" id="motivation-1"><h2>Motivation</h2></a>
+<p>Fluence nodes are stateful but it is wasteful to store website (or something else) static resources on them. We can use decentralized storage like IPFS to store static resources and save the decentralized state of the whole system.</p>
+<a class="header" href="#requirements-1" id="requirements-1"><h2>Requirements</h2></a>
+<ul>
+<li><a href="https://docs.ipfs.io/introduction/install/">IPFS CLI</a> to upload resources</li>
+</ul>
+<a class="header" href="#how-to" id="how-to"><h2>How To</h2></a>
+<p>First of all, we need already written frontend interacting with Fluence nodes.</p>
+<p>And then let's upload directory with frontend code:</p>
+<pre><code>IPFS_ADDR=$(host data.fluence.one | awk '/has address/ { print $4 }')
+ipfs --api /ip4/$IPFS_ADDR/tcp/5001 add -r build/
+</code></pre>
+<p><code>IPFS_ADDR</code> - is a data.fluence.one ip address</p>
+<p>This command will return a hash of directory. We can check if the directory is uploaded by opening a link with this hash: <code>http://data.fluence.one:8080/ipfs/&lt;IpfsHash&gt;</code></p>
+<p>That's it! Now your frontend code is available with this link: <code>http://data.fluence.one:8080/ipfs/&lt;IpfsHash&gt;/index.html</code></p>
+<p>Note, that your entrypoint is not <code>index.html</code>, change the link to right one. </p>
 <a class="header" href="#publishing-the-backend-app" id="publishing-the-backend-app"><h1>Publishing the backend app</h1></a>
 <p>In the Fluence network, applications are deployed by uploading WebAssembly code to IPFS, and publishing hashes of the uploaded code to the Fluence smart contract.</p>
 <p>It is also possible to specify the desired cluster size, which sets the required number of real-time workers in the cluster hosting the application. Note that the application might wait in the queue until there are enough free workers to form a cluster of the desired size.</p>
@@ -1219,7 +1299,7 @@ env.user = &quot;root&quot;
 </ul>
 <a class="header" href="#fluence-cli" id="fluence-cli"><h2>Fluence CLI</h2></a>
 <p>Fluence CLI is an automation tool for tasks of app management (deployment and deletion), computation resource sharing (node registration), and monitoring Fluence network state (status). See usage for more info.</p>
-<a class="header" href="#requirements" id="requirements"><h2>Requirements</h2></a>
+<a class="header" href="#requirements-2" id="requirements-2"><h2>Requirements</h2></a>
 <p>CLI assumes running Ethereum and Swarm on <code>http://data.fluence.one:8545/</code> and <code>http://data.fluence:8500/</code> respectively. Use <code>--eth_url</code> and <code>--storage_url</code> to specify actual addresses as you need.</p>
 <p>Please note, that your Ethereum account should have sufficient funds for issuing transactions to smart-contract. It's only for transaction fees, Fluence itself doesn't currently charge miners or developers. That could change in the future, for example when miners' deposits are implemented.</p>
 <p>Also, take a look at <a href="../tools/deploy/README.html">deployment scripts</a>, they will assist you in running Swarm, Ethereum and Fluence nodes.</p>
@@ -1299,6 +1379,7 @@ The following command will register a node:</p>
 <li>however, you can build it by issuing <code>sbt vm-counter/compile</code> in project root</li>
 </ul>
 </li>
+<li>you can publish multiple wasm files in one directory.</li>
 </ul>
 <p>NOTE: currently maximum <code>cluster_size</code> is limited by <code>4</code>. This is to limit resource exhaustion. To use a cluster of larger size, you can <a href="../docs/src/roles/miner.html">spin up your own nodes</a>, and ping to them via <code>--pin_to</code> flag.</p>
 <p>Please refer to <a href="../backend-sdk/README.html">Fluence Rust SDK</a> and <a href="../docs/src/quickstart/rust.html">Rust guide</a> to get information about developing apps with Fluence.</p>
@@ -1496,7 +1577,7 @@ App enqueued.
           --account            0x4180fc65d613ba7e1a385181a219f1dbfe7bf11d
 </code></pre>
 <p>In that case, transaction is sent to Ethereum node via <code>eth_sendTransaction</code> unsigned, so it's expected that there is no authorization enabled on your node. <strong>This option isn't secure and was meant to be used for testing purposes.</strong></p>
-<a class="header" href="#examples" id="examples"><h1>Examples</h1></a>
+<a class="header" href="#examples-1" id="examples-1"><h1>Examples</h1></a>
 <p>We have provided few simple applications utilizing the Fluence network infrastructure:</p>
 <ul>
 <li><a href="https://github.com/fluencelabs/tutorials/tree/master/hello-world/app-sdk-rust-2018">Hello world</a> is a basic demo application demonstrating Fluence SDK usage</li>
