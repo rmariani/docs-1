@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Key examples - The Fluence book</title>
+        <title>HTTP protocol - The Fluence book</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -78,7 +78,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="quickstart/index.html"><strong aria-hidden="true">2.</strong> Quickstart</a></li><li><ol class="section"><li><a href="quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend</a></li><li><ol class="section"><li><a href="quickstart/backend.html"><strong aria-hidden="true">2.1.1.</strong> Rust</a></li><li><a href="quickstart/backend-assemblyscript.html"><strong aria-hidden="true">2.1.2.</strong> AssemblyScript</a></li></ol></li><li><a href="quickstart/publish.html"><strong aria-hidden="true">2.2.</strong> Publishing the backend app</a></li><li><a href="quickstart/web.html"><strong aria-hidden="true">2.3.</strong> Developing the web app</a></li><li><a href="quickstart/ipfs-website.html"><strong aria-hidden="true">2.4.</strong> Publishing the web app to IPFS</a></li><li><a href="quickstart/recap.html"><strong aria-hidden="true">2.5.</strong> Recap</a></li></ol></li><li><a href="backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="backend/sdk.html"><strong aria-hidden="true">3.1.</strong> Rust</a></li><li><ol class="section"><li><a href="backend/sdk.html"><strong aria-hidden="true">3.1.1.</strong> SDK overview</a></li><li><a href="backend/best_practices.html"><strong aria-hidden="true">3.1.2.</strong> Best practices</a></li><li><a href="backend/internals.html"><strong aria-hidden="true">3.1.3.</strong> Internals</a></li></ol></li><li><a href="soon.html"><strong aria-hidden="true">3.2.</strong> C, C++, AssemblyScript: soon</a></li><li><a href="http.html"><strong aria-hidden="true">3.3.</strong> HTTP protocol</a></li></ol></li><li><a href="nodes.html"><strong aria-hidden="true">4.</strong> Running Fluence nodes</a></li><li><a href="cli.html"><strong aria-hidden="true">5.</strong> Command-line interface</a></li><li><a href="examples.html" class="active"><strong aria-hidden="true">6.</strong> Key examples</a></li><li><a href="project.html"><strong aria-hidden="true">7.</strong> Project status</a></li></ol>
+            <ol class="chapter"><li><a href="introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="quickstart/index.html"><strong aria-hidden="true">2.</strong> Quickstart</a></li><li><ol class="section"><li><a href="quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend</a></li><li><ol class="section"><li><a href="quickstart/backend.html"><strong aria-hidden="true">2.1.1.</strong> Rust</a></li><li><a href="quickstart/backend-assemblyscript.html"><strong aria-hidden="true">2.1.2.</strong> AssemblyScript</a></li></ol></li><li><a href="quickstart/publish.html"><strong aria-hidden="true">2.2.</strong> Publishing the backend app</a></li><li><a href="quickstart/web.html"><strong aria-hidden="true">2.3.</strong> Developing the web app</a></li><li><a href="quickstart/ipfs-website.html"><strong aria-hidden="true">2.4.</strong> Publishing the web app to IPFS</a></li><li><a href="quickstart/recap.html"><strong aria-hidden="true">2.5.</strong> Recap</a></li></ol></li><li><a href="backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="backend/sdk.html"><strong aria-hidden="true">3.1.</strong> Rust</a></li><li><ol class="section"><li><a href="backend/sdk.html"><strong aria-hidden="true">3.1.1.</strong> SDK overview</a></li><li><a href="backend/best_practices.html"><strong aria-hidden="true">3.1.2.</strong> Best practices</a></li><li><a href="backend/internals.html"><strong aria-hidden="true">3.1.3.</strong> Internals</a></li></ol></li><li><a href="soon.html"><strong aria-hidden="true">3.2.</strong> C, C++, AssemblyScript: soon</a></li><li><a href="http.html" class="active"><strong aria-hidden="true">3.3.</strong> HTTP protocol</a></li></ol></li><li><a href="nodes.html"><strong aria-hidden="true">4.</strong> Running Fluence nodes</a></li><li><a href="cli.html"><strong aria-hidden="true">5.</strong> Command-line interface</a></li><li><a href="examples.html"><strong aria-hidden="true">6.</strong> Key examples</a></li><li><a href="project.html"><strong aria-hidden="true">7.</strong> Project status</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -143,29 +143,35 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#examples" id="examples"><h1>Examples</h1></a>
-<p>We have provided few simple applications utilizing the Fluence network infrastructure:</p>
+                        <a class="header" href="#fluence-http-protocol" id="fluence-http-protocol"><h1>Fluence HTTP protocol</h1></a>
+<p>Fluence HTTP protocol is simple, and supports two main features: session-handling, and request ordering.</p>
+<p>Given IP <code>1.2.3.4</code>, request with a tx would look like this</p>
+<pre><code>curl 'http://1.2.3.4:25000/apps/2/tx' --data $'sessionId/0\nRequestBody'
+</code></pre>
 <ul>
-<li><a href="https://github.com/fluencelabs/tutorials/tree/master/hello-world/app-sdk-rust-2018">Hello world</a> is a basic demo application demonstrating Fluence SDK usage</li>
-<li><a href="https://github.com/fluencelabs/tutorials/tree/master/llamadb">Llamadb</a> is a port of an existing in-memory SQL database</li>
-<li><a href="https://github.com/fluencelabs/tutorials/tree/master/tic-tac-toe">Tic-tac-toe</a> is a basic <a href="https://en.wikipedia.org/wiki/Perfect_information">perfect information</a> multi-player game</li>
-<li><a href="https://github.com/fluencelabs/tutorials/tree/master/dice-game">Dice game</a> demonstrates how an RNG can be used to implement a simple gambling application</li>
-<li><a href="https://github.com/fluencelabs/tutorials/tree/master/guessing-game">Guess the Number</a> is an invalid implementation of an imperfect information game (which cannot be launched on Fluence at the current moment)</li>
-<li><a href="https://github.com/fluencelabs/tutorials/tree/master/streamr">Streamr analytics</a> is a simple analytics built on top of a <a href="https://www.streamr.com/">blockchain-based data marketplace</a></li>
+<li><code>:25000</code> - default Fluence port</li>
+<li><code>apps</code> - prefix for appId routing</li>
+<li><code>2</code> - appId</li>
+<li><code>tx</code> - suffix for all txs</li>
+<li><code>sessionId</code> - random client-generated string, requests are ordered by that string</li>
+<li><code>0</code> - requests counter, user for ordering, should be incremented sequentially, i.e., avoid number skipping</li>
+<li>'\n'- separator between <code>sessionId/counter</code> and the request</li>
+<li>'RequestBody' - could be anything, sent directly to your application</li>
 </ul>
+<p>So, the main thing to take away is a <code>sessionId/counter\nbody</code> format, and remember to increment requests counter sequentially, because Fluence will wait for all omitted request numbers. This is done to preserve strict ordering, so Fluence can guarantee request processing in the strict order.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="cli.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="soon.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="project.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="nodes.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -177,13 +183,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="cli.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="soon.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="project.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="nodes.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

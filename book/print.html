@@ -78,7 +78,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="quickstart/index.html"><strong aria-hidden="true">2.</strong> Quickstart</a></li><li><ol class="section"><li><a href="quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend app on Rust</a></li><li><a href="quickstart/backend-assemblyscript.html"><strong aria-hidden="true">2.2.</strong> Developing the backend app on AssemblyScript</a></li><li><a href="quickstart/ipfs-website.html"><strong aria-hidden="true">2.3.</strong> Decentralized website on FLuence+IPFS</a></li><li><a href="quickstart/publish.html"><strong aria-hidden="true">2.4.</strong> Publishing the backend app</a></li><li><a href="quickstart/web.html"><strong aria-hidden="true">2.5.</strong> Developing the web app</a></li><li><a href="quickstart/recap.html"><strong aria-hidden="true">2.6.</strong> Recap</a></li></ol></li><li><a href="backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="backend/sdk.html"><strong aria-hidden="true">3.1.</strong> SDK overview</a></li><li><a href="backend/best_practices.html"><strong aria-hidden="true">3.2.</strong> Best practices</a></li><li><a href="backend/internals.html"><strong aria-hidden="true">3.3.</strong> Internals</a></li></ol></li><li><a href="nodes.html"><strong aria-hidden="true">4.</strong> Running Fluence nodes</a></li><li><a href="cli.html"><strong aria-hidden="true">5.</strong> Command-line interface</a></li><li><a href="examples.html"><strong aria-hidden="true">6.</strong> Key examples</a></li><li><a href="project.html"><strong aria-hidden="true">7.</strong> Project status</a></li></ol>
+            <ol class="chapter"><li><a href="introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="quickstart/index.html"><strong aria-hidden="true">2.</strong> Quickstart</a></li><li><ol class="section"><li><a href="quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend</a></li><li><ol class="section"><li><a href="quickstart/backend.html"><strong aria-hidden="true">2.1.1.</strong> Rust</a></li><li><a href="quickstart/backend-assemblyscript.html"><strong aria-hidden="true">2.1.2.</strong> AssemblyScript</a></li></ol></li><li><a href="quickstart/publish.html"><strong aria-hidden="true">2.2.</strong> Publishing the backend app</a></li><li><a href="quickstart/web.html"><strong aria-hidden="true">2.3.</strong> Developing the web app</a></li><li><a href="quickstart/ipfs-website.html"><strong aria-hidden="true">2.4.</strong> Publishing the web app to IPFS</a></li><li><a href="quickstart/recap.html"><strong aria-hidden="true">2.5.</strong> Recap</a></li></ol></li><li><a href="backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="backend/sdk.html"><strong aria-hidden="true">3.1.</strong> Rust</a></li><li><ol class="section"><li><a href="backend/sdk.html"><strong aria-hidden="true">3.1.1.</strong> SDK overview</a></li><li><a href="backend/best_practices.html"><strong aria-hidden="true">3.1.2.</strong> Best practices</a></li><li><a href="backend/internals.html"><strong aria-hidden="true">3.1.3.</strong> Internals</a></li></ol></li><li><a href="soon.html"><strong aria-hidden="true">3.2.</strong> C, C++, AssemblyScript: soon</a></li><li><a href="http.html"><strong aria-hidden="true">3.3.</strong> HTTP protocol</a></li></ol></li><li><a href="nodes.html"><strong aria-hidden="true">4.</strong> Running Fluence nodes</a></li><li><a href="cli.html"><strong aria-hidden="true">5.</strong> Command-line interface</a></li><li><a href="examples.html"><strong aria-hidden="true">6.</strong> Key examples</a></li><li><a href="project.html"><strong aria-hidden="true">7.</strong> Project status</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -442,6 +442,185 @@ Let's check it:</p>
 <pre><code class="language-bash">~/hello-world $ ls -lh target/wasm32-unknown-unknown/release/hello_world.wasm
 -rwxr-xr-x  2 user  user  1.4M Feb 11 11:59 target/wasm32-unknown-unknown/release/hello_world.wasm
 </code></pre>
+<a class="header" href="#developing-the-backend-app-1" id="developing-the-backend-app-1"><h1>Developing the backend app</h1></a>
+<p>Fluence runs WebAssembly programs, so it is possible to build a Fluence backend in any language that targets WebAssembly. In this guide we will use Rust as a language of choice.</p>
+<p>First you will build a hello world Rust app, adapt it to Fluence, and then compile it to WebAssembly.</p>
+<a class="header" href="#setting-up-rust-1" id="setting-up-rust-1"><h2>Setting up Rust</h2></a>
+<p>Let's get some Rust!</p>
+<p>Install the Rust compiler:</p>
+<pre><code class="language-bash"># installs the Rust compiler and supplementary tools to `~/.cargo/bin`
+~ $ curl https://sh.rustup.rs -sSf | sh -s -- -y
+info: downloading installer
+...
+Rust is installed now. Great!
+To configure your current shell run source $HOME/.cargo/env
+</code></pre>
+<p>Let's listen to the installer and configure your current shell:<br />
+<small>(new shell environments should pick up the right configuration automatically)</small></p>
+<pre><code class="language-bash">~ $ source $HOME/.cargo/env
+&lt;no output&gt;
+</code></pre>
+<p>After that, we need to install the nighly Rust toolchain:<br />
+<small>(Fluence Rust SDK requires the nightly toolchain due to certain memory operations)</small></p>
+<pre><code class="language-bash">~ $ rustup toolchain install nightly
+info: syncing channel updates ...
+...
+  nightly-&lt;arch&gt; installed - rustc 1.34.0-nightly (57d7cfc3c 2019-02-11)
+</code></pre>
+<p>Let's check that the nightly toolchain was installed successfully:</p>
+<pre><code class="language-bash">~ $ rustup toolchain list | grep nightly
+# the output should contain the nighly toolchain
+...
+nightly-&lt;arch&gt;
+</code></pre>
+<p>To compile Rust to WebAssembly, we also need to add the <code>wasm32</code> compilation target:</p>
+<pre><code class="language-bash"># install target for WebAssembly
+~ $ rustup target add wasm32-unknown-unknown --toolchain nightly
+info: downloading component 'rust-std' for 'wasm32-unknown-unknown'
+info: installing component 'rust-std' for 'wasm32-unknown-unknown'
+</code></pre>
+<p>Finally, let's check that everything was set up correctly and compile a sample Rust code:</p>
+<pre><code class="language-bash"># create a simple program that always returns 1
+~ $ echo &quot;fn main(){1;}&quot; &gt; test.rs
+
+# compile it to WebAssembly using rustc from the nightly toolchain
+~ $ rustup run nightly rustc --target=wasm32-unknown-unknown test.rs
+&lt;no output&gt;
+
+# check that the test.wasm output file was created
+~ $ ls -lh test.wasm
+-rwxr-xr-x  1 user  user   1.4M Feb 11 11:59 test.wasm
+</code></pre>
+<p>If everything looks similar, then it's time to create a Rust hello-world project!</p>
+<a class="header" href="#creating-an-empty-rust-package-1" id="creating-an-empty-rust-package-1"><h2>Creating an empty Rust package</h2></a>
+<p>Let's create a new empty Rust package:</p>
+<pre><code class="language-bash"># create empty Rust package
+~ $ cargo +nightly new hello-world --edition 2018
+Created binary (application) `hello-world` package
+
+# go to the package directory
+~ $ cd hello-world
+~/hello-world $
+</code></pre>
+<p>More info on creating a new Rust project can be found in the Rust <a href="https://doc.rust-lang.org/cargo/guide/creating-a-new-project.html">Cargo book</a>.</p>
+<a class="header" href="#optional-creating-a-hello-world-rust-application-1" id="optional-creating-a-hello-world-rust-application-1"><h2>[Optional] Creating a Hello World Rust application</h2></a>
+<p>If you are already familiar with Rust, feel free to skip this section.</p>
+<p>Let's write some code: our backend should receive a user name from the program input, and then print a greeting.</p>
+<p>Take a look at <code>src/main.rs</code>:</p>
+<pre><code class="language-bash">~/hello-world $ cat src/main.rs
+</code></pre>
+<p>You will see the following code, which should be there by default and almost does what we need:</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
+    println!(&quot;Hello, world!&quot;);
+}
+</code></pre></pre>
+<p>Open <code>src/main.rs</code> in any editor, delete all existing code, and paste the following:</p>
+<pre><pre class="playpen"><code class="language-rust">use std::env;
+
+fn greeting(name: String) -&gt; String {
+    format!(&quot;Hello, world! -- {}&quot;, name)
+}
+
+fn main() {
+    let name = env::args().nth(1).unwrap();
+    println!(&quot;{}&quot;, greeting(name));
+}
+</code></pre></pre>
+<p>This code:</p>
+<ol>
+<li>defines the <code>greeting</code> function which takes a name and returns a greeting message</li>
+<li>defines the <code>main</code> function which reads the first argument, passes it to the <code>greeting</code> function, and prints the returned result</li>
+</ol>
+<p>Let's now compile and run our example:</p>
+<pre><code class="language-bash">~/hello-world $ cargo +nightly run MyName
+   Compiling hello-world v0.1.0 (/root/hello-world)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.70s
+     Running `target/debug/hello-world MyName`
+Hello, world! -- MyName
+</code></pre>
+<hr />
+<p><strong>WARNING!</strong> If you see the following error, you should install <a href="https://gcc.gnu.org/install/">gcc</a> and try <code>cargo +nightly run</code> again:</p>
+<pre><code class="language-bash">Compiling hello-world v0.1.0 (/root/hello-world)
+error: linker cc not found
+  |
+  = note: No such file or directory (os error 2)
+
+error: aborting due to previous error
+error: Could not compile hello-world.
+</code></pre>
+<hr />
+<p>Now that we have a working Hello World application, it's time to adapt it for Fluence.</p>
+<a class="header" href="#creating-a-hello-world-backend-for-fluence-1" id="creating-a-hello-world-backend-for-fluence-1"><h2>Creating a Hello World backend for Fluence</h2></a>
+<p>For a backend to be compatible with the Fluence network, it should follow few conventions to let Fluence nodes run your code correctly. To reduce the amount of boilerplate code, we have developed the Rust SDK. Let's see how to use it.</p>
+<a class="header" href="#adding-fluence-as-a-dependency-1" id="adding-fluence-as-a-dependency-1"><h3>Adding Fluence as a dependency</h3></a>
+<p>First you need to add the Fluence Rust SDK to as a dependency.<br />
+Let's take a look at <code>Cargo.toml</code>:</p>
+<pre><code class="language-bash">~/hello-world $ cat Cargo.toml
+</code></pre>
+<p>It should look like this:</p>
+<pre><code class="language-toml">[package]
+name = &quot;hello-world&quot;
+version = &quot;0.1.0&quot;
+authors = [&quot;root&quot;]
+edition = &quot;2018&quot;
+
+[dependencies]
+</code></pre>
+<p>Now, open <code>Cargo.toml</code> in the editor, and add <code>fluence</code> to <code>dependencies</code>:</p>
+<pre><code class="language-toml">[package]
+name = &quot;hello-world&quot;
+version = &quot;0.1.0&quot;
+authors = [&quot;root&quot;]
+edition = &quot;2018&quot;
+
+[dependencies]
+fluence = {version = &quot;0.0.11&quot;}
+</code></pre>
+<a class="header" href="#implementing-the-backend-logic-1" id="implementing-the-backend-logic-1"><h3>Implementing the backend logic</h3></a>
+<p>Create and open <code>~/hello-world/src/lib.rs</code> in the editor and paste the following code there:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+use fluence::sdk::*;
+
+#[invocation_handler]
+fn greeting(name: String) -&gt; String {
+    format!(&quot;Hello, world! From user {}&quot;, name)
+}
+#}</code></pre></pre>
+<p>This code imports the Fluence SDK, and marks the <code>greeting</code> function with the <code>#[invocation_handler]</code> macro.</p>
+<p>The function marked with the <code>#[invocation_handler]</code> macro is called a <em>gateway function</em>. It is essentially the entry point to your application: all client transactions will be passed to this function, and once it returns a result, clients can read this result.</p>
+<p>Gateway functions are allowed to take and return only <code>String</code> or <code>Vec&lt;u8&gt;</code> values – check out the <a href="quickstart/../backend/sdk.html">SDK overview</a> for more information.</p>
+<a class="header" href="#making-it-a-library-1" id="making-it-a-library-1"><h3>Making it a library</h3></a>
+<p>For the gateway function to be correctly exported and thus available for Fluence, the backend should be compiled to WebAssembly as a library.</p>
+<p>To make the backend a library, open <code>Cargo.toml</code> in the editor, and add the <code>[lib]</code>section:</p>
+<pre><code class="language-toml">[package]
+name = &quot;hello-world&quot;
+version = &quot;0.1.0&quot;
+authors = [&quot;root&quot;]
+edition = &quot;2018&quot;
+
+[lib]
+name = &quot;hello_world&quot;
+path = &quot;src/lib.rs&quot;
+crate-type = [&quot;cdylib&quot;]
+
+[dependencies]
+fluence = { version = &quot;0.0.11&quot;}
+</code></pre>
+<a class="header" href="#compiling-to-webassembly-1" id="compiling-to-webassembly-1"><h3>Compiling to WebAssembly</h3></a>
+<p>To build the <code>.wasm</code> file, run this from the application directory:<br />
+<small>(note: downloading and compiling dependencies might take a few minutes)</small></p>
+<pre><code class="language-bash">~/hello-world $ cargo +nightly build --lib --target wasm32-unknown-unknown --release
+    Updating crates.io index
+    ...
+    Finished release [optimized] target(s) in 1m 16s
+</code></pre>
+<p>If everything goes well, you should get the <code>.wasm</code> file deep in the target directory.<br />
+Let's check it:</p>
+<pre><code class="language-bash">~/hello-world $ ls -lh target/wasm32-unknown-unknown/release/hello_world.wasm
+-rwxr-xr-x  2 user  user  1.4M Feb 11 11:59 target/wasm32-unknown-unknown/release/hello_world.wasm
+</code></pre>
 <a class="header" href="#developing-the-backend-app-on-assemblyscript" id="developing-the-backend-app-on-assemblyscript"><h1>Developing the backend app on AssemblyScript</h1></a>
 <p>Let's build Hello World app for Fluence.</p>
 <a class="header" href="#requirements" id="requirements"><h2>Requirements</h2></a>
@@ -455,7 +634,7 @@ Let's check it:</p>
 <li>Wait one minute. Enter 'y' when asked.</li>
 <li>This script will initialize project, that we can already compile to WebAssembly and deploy into Fluence system.</li>
 </ol>
-<a class="header" href="#creating-a-hello-world-backend-for-fluence-1" id="creating-a-hello-world-backend-for-fluence-1"><h2>Creating a Hello World backend for Fluence</h2></a>
+<a class="header" href="#creating-a-hello-world-backend-for-fluence-2" id="creating-a-hello-world-backend-for-fluence-2"><h2>Creating a Hello World backend for Fluence</h2></a>
 <p>All we need for now is to change <code>handle</code> function in <code>main.ts</code> file:</p>
 <pre><code class="language-js">// main handler for an application
 export function handler(request: string): string {
@@ -505,23 +684,6 @@ export function invoke(ptr: i32, size: i32): i32 {
 <li>JSON.parse/JSON.stringify</li>
 <li>virtual methods (the method of the compile time type will always be called)</li>
 </ul>
-<a class="header" href="#website-with-fluence-backend-and-static-resources-on-ipfs" id="website-with-fluence-backend-and-static-resources-on-ipfs"><h1>Website with Fluence backend and static resources on IPFS</h1></a>
-<a class="header" href="#motivation-1" id="motivation-1"><h2>Motivation</h2></a>
-<p>Fluence nodes are stateful but it is wasteful to store website (or something else) static resources on them. We can use decentralized storage like IPFS to store static resources and save the decentralized state of the whole system.</p>
-<a class="header" href="#requirements-1" id="requirements-1"><h2>Requirements</h2></a>
-<ul>
-<li><a href="https://docs.ipfs.io/introduction/install/">IPFS CLI</a> to upload resources</li>
-</ul>
-<a class="header" href="#how-to" id="how-to"><h2>How To</h2></a>
-<p>First of all, we need already written frontend interacting with Fluence nodes.</p>
-<p>And then let's upload directory with frontend code:</p>
-<pre><code>IPFS_ADDR=$(host data.fluence.one | awk '/has address/ { print $4 }')
-ipfs --api /ip4/$IPFS_ADDR/tcp/5001 add -r build/
-</code></pre>
-<p><code>IPFS_ADDR</code> - is a data.fluence.one ip address</p>
-<p>This command will return a hash of directory. We can check if the directory is uploaded by opening a link with this hash: <code>http://data.fluence.one:8080/ipfs/&lt;IpfsHash&gt;</code></p>
-<p>That's it! Now your frontend code is available with this link: <code>http://data.fluence.one:8080/ipfs/&lt;IpfsHash&gt;/index.html</code></p>
-<p>Note, that your entrypoint is not <code>index.html</code>, change the link to right one. </p>
 <a class="header" href="#publishing-the-backend-app" id="publishing-the-backend-app"><h1>Publishing the backend app</h1></a>
 <p>In the Fluence network, applications are deployed by uploading WebAssembly code to IPFS, and publishing hashes of the uploaded code to the Fluence smart contract.</p>
 <p>It is also possible to specify the desired cluster size, which sets the required number of real-time workers in the cluster hosting the application. Note that the application might wait in the queue until there are enough free workers to form a cluster of the desired size.</p>
@@ -688,6 +850,23 @@ logResultAsString(result);
 &lt;undefined&gt;
 Hello, world! -- MyName
 </code></pre>
+<a class="header" href="#website-with-fluence-backend-and-static-resources-on-ipfs" id="website-with-fluence-backend-and-static-resources-on-ipfs"><h1>Website with Fluence backend and static resources on IPFS</h1></a>
+<a class="header" href="#motivation-1" id="motivation-1"><h2>Motivation</h2></a>
+<p>Fluence nodes are stateful but it is wasteful to store website (or something else) static resources on them. We can use decentralized storage like IPFS to store static resources and save the decentralized state of the whole system.</p>
+<a class="header" href="#requirements-1" id="requirements-1"><h2>Requirements</h2></a>
+<ul>
+<li><a href="https://docs.ipfs.io/introduction/install/">IPFS CLI</a> to upload resources</li>
+</ul>
+<a class="header" href="#how-to" id="how-to"><h2>How To</h2></a>
+<p>First of all, we need already written frontend interacting with Fluence nodes.</p>
+<p>And then let's upload directory with frontend code:</p>
+<pre><code>IPFS_ADDR=$(host data.fluence.one | awk '/has address/ { print $4 }')
+ipfs --api /ip4/$IPFS_ADDR/tcp/5001 add -r build/
+</code></pre>
+<p><code>IPFS_ADDR</code> - is a data.fluence.one ip address</p>
+<p>This command will return a hash of directory. We can check if the directory is uploaded by opening a link with this hash: <code>http://data.fluence.one:8080/ipfs/&lt;IpfsHash&gt;</code></p>
+<p>That's it! Now your frontend code is available with this link: <code>http://data.fluence.one:8080/ipfs/&lt;IpfsHash&gt;/index.html</code></p>
+<p>Note, that your entrypoint is not <code>index.html</code>, change the link to right one. </p>
 <a class="header" href="#recap" id="recap"><h1>Recap</h1></a>
 <p>Thanks for finishing the quickstart guide!</p>
 <p>A short recap of what you have developed and learned:</p>
@@ -782,6 +961,108 @@ fn greeting(name: String) -&gt; String {
 </ul>
 <p>Then the hash of internal state is computed by <code>vm.getVmState</code> and <code>invoke</code> from <code>app</code> is called by <code>vm.invoke</code>.</p>
 <a class="header" href="#wasm-logger" id="wasm-logger"><h2>Wasm logger</h2></a>
+<p>To debug backend applications, the SDK provides
+There are a few debugging capabilities for Wasm program. The Fluence network provides a possibility to so-called print-debugging. It can be included by specifying the <code>wasm_logger</code> feature of the sdk.</p>
+<p>The logger is implemented as a logging facade for crate <a href="https://github.com/rust-lang-nursery/log">log</a>. It means that all <code>log</code> crate possibilities can be used as usual. Let's review it by the example of <a href="https://github.com/fluencelabs/fluence/tree/master/vm/examples/hello-world2/app-2018">hello-world2</a> application with simple logging:</p>
+<pre><code class="language-Rust">use fluence::sdk::*;
+use log::info;
+
+fn init() {
+    logger::WasmLogger::init_with_level(log::Level::Info).is_ok()
+}
+
+#[invocation_handler(init_fn = init)]
+fn main(name: String) -&gt; String {
+    info!(&quot;{} has been successfully greeted&quot;, name);
+    format!(&quot;Hello from Fluence to {}&quot;, name)
+}
+</code></pre>
+<p>The easiest way to initialize the logger is using the <code>init_fn</code> attribute of <code>invocation_handler</code> like in the example above.</p>
+<p>Please also note that this <code>logger</code> is designed only for Wasm environment and Fluence <code>WasmVm</code>. Don't use it for other targets and virtual machines. But if it needs to create a project with <code>logger</code> either for Wasm target and other architectures, a conditional compilation can be used:</p>
+<pre><code class="language-Rust">fn init() {
+    if cfg!(target_arch = &quot;wasm32&quot;) {
+        logger::WasmLogger::init_with_level(log::Level::Info).unwrap();
+    } else {
+        simple_logger::init_with_level(log::Level::Info).unwrap();
+    }
+}
+</code></pre>
+<p>Without this trick <code>app</code> that uses the logger can be compiled only for <code>wasm32-unknown-unknown</code> target.</p>
+<p>It is also important to note that by default debugging capabilities is disabled in the Fluence network because of verification game process (you can find more information about it in <a href="TODO">our paper</a>). --&gt;</p>
+<a class="header" href="#backend-sdk-overview-1" id="backend-sdk-overview-1"><h1>Backend SDK overview</h1></a>
+<p>Fluence backend SDK consists of two crates: <code>main</code> and <code>macro</code>. The <code>main</code> crate is used for all memory relative operations and logging, while the <code>macro</code> crate contains the macro to simplify entry point functions. These crates can be used separately but the preferred way is to use the global <code>fluence</code> crate which combines all the others.</p>
+<p>In Rust 2018 this can be done by adding <a href="https://crates.io/crates/fluence">Fluence SDK</a> as a dependency, and then adding <code>use fluence::sdk::*</code> to Rust sources.</p>
+<a class="header" href="#rust-2015-1" id="rust-2015-1"><h2>Rust 2015</h2></a>
+<p>To use Fluence SDK with Rust 2015 import it like this:</p>
+<pre><code class="language-Rust">#![feature(custom_attribute)]
+extern crate fluence;
+
+use fluence::sdk::*;
+</code></pre>
+<p>Example Rust 2015 application can be found <a href="https://github.com/fluencelabs/tutorials/tree/master/hello-world/app-logger-rust-2015">here</a>.</p>
+<a class="header" href="#entry-point-function-1" id="entry-point-function-1"><h2>Entry point function</h2></a>
+<p>Each WebAssembly backend application deployed to the Fluence network is expected to provide a single entry point function named <code>invoke</code>. The easiest way to implement this function is to use the <code>invocation_handler</code> macro provided by the Fluence SDK:</p>
+<pre><code class="language-Rust">use fluence::sdk::*;
+
+#[invocation_handler]
+fn greeting(name: String) -&gt; String {
+    format!(&quot;Hello, world! -- {}&quot;, name)
+}
+</code></pre>
+<p>If anything goes wrong, <a href="https://github.com/dtolnay/cargo-expand">cargo expand</a> can be used for troubleshooting and macros debugging.  Keep in mind that the function which the macro is attached to should:</p>
+<ul>
+<li>not have more than one input argument and always return a value</li>
+<li>not be unsafe, const, generic, or have custom abi linkage or variadic params</li>
+<li>have the input argument type (if present) and return type to be either <code>String</code> or <code>Vec&lt;u8&gt;</code></li>
+<li>not use the <code>invoke</code> name, which is reserved by the Fluence SDK</li>
+</ul>
+<p>The <code>invocation_handler</code> macro additionally allows to specify the initialization function:</p>
+<pre><code class="language-Rust">use fluence::sdk::*;
+
+fn init() {
+    // will be called just before the first `greeting()` function invocation
+}
+
+#[invocation_handler(init_fn = init)]
+fn greeting(name: String) -&gt; String {
+    format!(&quot;Hello, world! -- {}&quot;, name)
+}
+</code></pre>
+<p>The initialization function will be called only once and before any other code when the first transaction arrives. Therefore, it is a great place to put the code preparing the backend application.</p>
+<a class="header" href="#debugging-1" id="debugging-1"><h2>Debugging</h2></a>
+<p><strong>TBD</strong></p>
+<!-- ## App runner
+<p>Sometimes it needs not only a debug output but a possibility to run a compiled Wasm <code>app</code> with some different inputs. It can be done by using so-called runner written on Scala (because it uses a <code>WasmVm</code> implementation that also written on Scala).</p>
+<p>Let's a dig a little bit into the <code>hello-world2</code> <a href="(https://github.com/fluencelabs/fluence/tree/master/vm/examples/hello-world2/runner)">runner</a>. It receives a path to a Wasm binary as the first CLI argument, then creates a <code>vm</code> object that extends <code>WasmVm</code> trait. During this creation, Wasm code is compiled by Asmble to JVM and loaded into VM. This trait has two public methods: <code>invoke</code> that manages requests to <code>app</code> and <code>getVmState</code> that computes a hash of significant inner state. In the following code snippet</p>
+<pre><code class="language-Scala">      inputFile &lt;- EitherT(getWasmFilePath(args).attempt)
+        .leftMap(e =&gt; InternalVmError(e.getMessage, Some(e)))
+        
+      vm ← WasmVm[IO](NonEmptyList.one(inputFile), &quot;fluence.vm.debugger&quot;)
+      
+      initState ← vm.getVmState[IO]
+
+      result1 ← vm.invoke[IO](None, &quot;John&quot;.getBytes())
+</code></pre>
+<p><code>inputFile</code> points to a supplied path to wasm file. Then WasmVm instance is created with the path to input file and <code>fluence.vm.debugger</code> config. This config (for the <code>hello-world2</code> <code>app</code> it can be found <a href="https://github.com/fluencelabs/fluence/blob/master/vm/examples/hello-world2/runner/src/main/resources/reference.conf">here</a>) contains some useful settings that control some inner VM creation process a little bit:</p>
+<ul>
+<li>
+<p><code>defaultMaxMemPages</code> - the maximum number of memory pages when a module doesn't specify it, each Wasm page according to the specification contains 65536 bytes (64 by default, 65536*64 = 4MB)</p>
+</li>
+<li>
+<p><code>loggerRegister</code> - if &gt; 0, registers the logger Wasm module as <code>logger</code> with specified number of memory pages, that allows to logs to stdout (0  by default in mainnet and 2 by default for runners)</p>
+</li>
+<li>
+<p><code>allocateFunctionName</code> - the name of function that should be called for memory allocation (<code>allocate</code> by default)</p>
+</li>
+<li>
+<p><code>deallocateFunctionName</code> - the name of function that should be called for deallocation of previously allocated memory by <code>allocateFunction</code> (<code>deallocate</code> by default)</p>
+</li>
+<li>
+<p><code>invokeFunctionName</code> - the name of the main module handler function (<code>invoke</code> by default)</p>
+</li>
+</ul>
+<p>Then the hash of internal state is computed by <code>vm.getVmState</code> and <code>invoke</code> from <code>app</code> is called by <code>vm.invoke</code>.</p>
+<a class="header" href="#wasm-logger-1" id="wasm-logger-1"><h2>Wasm logger</h2></a>
 <p>To debug backend applications, the SDK provides
 There are a few debugging capabilities for Wasm program. The Fluence network provides a possibility to so-called print-debugging. It can be included by specifying the <code>wasm_logger</code> feature of the sdk.</p>
 <p>The logger is implemented as a logging facade for crate <a href="https://github.com/rust-lang-nursery/log">log</a>. It means that all <code>log</code> crate possibilities can be used as usual. Let's review it by the example of <a href="https://github.com/fluencelabs/fluence/tree/master/vm/examples/hello-world2/app-2018">hello-world2</a> application with simple logging:</p>
@@ -975,6 +1256,23 @@ pub unsafe fn deallocate(ptr: NonNull&lt;u8&gt;, size: usize) {
     Global.dealloc(ptr, layout);
 }
 </code></pre>
+<a class="header" href="#coming-soon" id="coming-soon"><h3>Coming soon</h3></a>
+<a class="header" href="#fluence-http-protocol" id="fluence-http-protocol"><h1>Fluence HTTP protocol</h1></a>
+<p>Fluence HTTP protocol is simple, and supports two main features: session-handling, and request ordering.</p>
+<p>Given IP <code>1.2.3.4</code>, request with a tx would look like this</p>
+<pre><code>curl 'http://1.2.3.4:25000/apps/2/tx' --data $'sessionId/0\nRequestBody'
+</code></pre>
+<ul>
+<li><code>:25000</code> - default Fluence port</li>
+<li><code>apps</code> - prefix for appId routing</li>
+<li><code>2</code> - appId</li>
+<li><code>tx</code> - suffix for all txs</li>
+<li><code>sessionId</code> - random client-generated string, requests are ordered by that string</li>
+<li><code>0</code> - requests counter, user for ordering, should be incremented sequentially, i.e., avoid number skipping</li>
+<li>'\n'- separator between <code>sessionId/counter</code> and the request</li>
+<li>'RequestBody' - could be anything, sent directly to your application</li>
+</ul>
+<p>So, the main thing to take away is a <code>sessionId/counter\nbody</code> format, and remember to increment requests counter sequentially, because Fluence will wait for all omitted request numbers. This is done to preserve strict ordering, so Fluence can guarantee request processing in the strict order.</p>
 <ul>
 <li><a href="#fluence-miner-guide">Fluence miner guide</a>
 <ul>
