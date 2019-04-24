@@ -1,0 +1,374 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>SDK overview - The Fluence book</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../../";
+            var default_theme = "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li><a href="../../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="../../introduction/overview.html"><strong aria-hidden="true">1.1.</strong> Overview</a></li><li><a href="../../introduction/motivation.html"><strong aria-hidden="true">1.2.</strong> Motivation</a></li><li><a href="../../introduction/incentive_model.html"><strong aria-hidden="true">1.3.</strong> Incentive model</a></li></ol></li><li><a href="../../quickstart/index.html"><strong aria-hidden="true">2.</strong> Quickstart</a></li><li><ol class="section"><li><a href="../../quickstart/backend.html"><strong aria-hidden="true">2.1.</strong> Developing the backend</a></li><li><ol class="section"><li><a href="../../quickstart/backend.html"><strong aria-hidden="true">2.1.1.</strong> Rust</a></li><li><a href="../../quickstart/backend-assemblyscript.html"><strong aria-hidden="true">2.1.2.</strong> AssemblyScript</a></li></ol></li><li><a href="../../quickstart/publish.html"><strong aria-hidden="true">2.2.</strong> Publishing the backend app</a></li><li><a href="../../quickstart/web.html"><strong aria-hidden="true">2.3.</strong> Developing the web app</a></li><li><a href="../../quickstart/ipfs-website.html"><strong aria-hidden="true">2.4.</strong> Publishing the web app to IPFS</a></li><li><a href="../../quickstart/recap.html"><strong aria-hidden="true">2.5.</strong> Recap</a></li></ol></li><li><a href="../../backend/index.html"><strong aria-hidden="true">3.</strong> Backend guide</a></li><li><ol class="section"><li><a href="../../backend/rust/sdk.html"><strong aria-hidden="true">3.1.</strong> Rust</a></li><li><ol class="section"><li><a href="../../backend/rust/sdk.html"><strong aria-hidden="true">3.1.1.</strong> SDK overview</a></li><li><a href="../../backend/rust/best_practices.html"><strong aria-hidden="true">3.1.2.</strong> Best practices</a></li></ol></li><li><a href="../../backend/c_cpp/sdk.html" class="active"><strong aria-hidden="true">3.2.</strong> C/C++</a></li><li><ol class="section"><li><a href="../../backend/c_cpp/sdk.html" class="active"><strong aria-hidden="true">3.2.1.</strong> SDK overview</a></li><li><a href="../../backend/c_cpp/best_practices.html"><strong aria-hidden="true">3.2.2.</strong> Best practices</a></li></ol></li><li><a href="../../soon.html"><strong aria-hidden="true">3.3.</strong> AssemblyScript: soon</a></li><li><a href="../../backend/debugging.html"><strong aria-hidden="true">3.4.</strong> Debugging</a></li><li><a href="../../backend/internals.html"><strong aria-hidden="true">3.5.</strong> Internals</a></li><li><a href="../../soon.html"><strong aria-hidden="true">3.6.</strong> HowTo: common patterns</a></li></ol></li><li><a href="../../frontend/index.html"><strong aria-hidden="true">4.</strong> Frontend guide</a></li><li><ol class="section"><li><a href="../../frontend/javascript.html"><strong aria-hidden="true">4.1.</strong> Javascript Client</a></li><li><a href="../../frontend/http.html"><strong aria-hidden="true">4.2.</strong> HTTP protocol</a></li></ol></li><li><a href="../../nodes.html"><strong aria-hidden="true">5.</strong> Running Fluence nodes</a></li><li><a href="../../cli.html"><strong aria-hidden="true">6.</strong> Command-line interface</a></li><li><a href="../../examples.html"><strong aria-hidden="true">7.</strong> Key examples</a></li><li><a href="../../project.html"><strong aria-hidden="true">8.</strong> Project status</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">The Fluence book</h1> 
+
+                        <div class="right-buttons">
+                            <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="#sdk-overview" id="sdk-overview"><h1>SDK overview</h1></a>
+<a class="header" href="#compilation-overview" id="compilation-overview"><h2>Compilation overview</h2></a>
+<p>There are two main requirements for provided Webassembly modules:</p>
+<ul>
+<li>they must have three export functions: <code>allocate</code>, <code>deallocate</code>, <code>invoke</code></li>
+<li>they don't have other import functions except <code>write</code> and <code>flush</code> from logger module</li>
+</ul>
+<p>You can find more detailed info about requirements in <a href="../internals.html">internals</a> section of this guide. But compilation of C/C++ to Webassembly often generates modules with several syscall imports. We have tried to simplify the compilation process for C/C++ as much as possible.</p>
+<p>There are few possible ways of compilation of C/C++ code to Webassembly, and two of them are most suitable for our platform:</p>
+<ul>
+<li>by wasm32-unknwon-wasi target</li>
+<li>by wasm32-unknown-unknown target</li>
+</ul>
+<a class="header" href="#wasm32-unknwon-wasi" id="wasm32-unknwon-wasi"><h3>wasm32-unknwon-wasi</h3></a>
+<p>Compilation with WASI-sysroot is quite simple:</p>
+<ol>
+<li>
+<p>WASI sysroot could be obtained by compilation of <a href="https://github.com/CraneStation/wasi-sysroot">wasi-sysroot</a> or could be done by downloading and installing it from <a href="https://github.com/CraneStation/wasi-sdk/releases">releases</a> (we recommend to use the latest one).</p>
+</li>
+<li>
+<p>Given WASI in /opt/wasi-sdk compilation could be done by</p>
+</li>
+</ol>
+<pre><code class="language-bash">~ $ clang --sysroot=/opt/wasi-sdk/ --target=wasm32-unknown-wasi -o module.wasm -nostartfiles -fvisibility=hidden -Wl,--no-entry,--export=allocate,--export=deallocate,--export=invoke,--allow-undefined -- *.c
+</code></pre>
+<p>There <code>--export</code> directives for linker manage it to make three functions exported from module and <code>--allow-undefined</code> used to make it possible to import <code>write</code> and <code>flush</code> functions.</p>
+<a class="header" href="#wasm32-unknwon-unknown" id="wasm32-unknwon-unknown"><h3>wasm32-unknwon-unknown</h3></a>
+<p>Compilation for wasm32-unknwon-unknown is more complicated and suggests building sysroot first:</p>
+<ol>
+<li>First of all it needs to install the latest stable llvm 8.x that supports Webassembly. On Ubuntu it could be done by following commands (more detailed overview of llvm installation could be found <a href="http://apt.llvm.org">here</a>):</li>
+</ol>
+<pre><code class="language-bash"># update sources with latest llvm mirror
+~ $ echo &quot;deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic main&quot; &gt;&gt; /etc/apt/sources.list.d/llvm.list &amp;&amp; \
+~ $ echo &quot;deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic main&quot; &gt;&gt; /etc/apt/sources.list.d/llvm.list &amp;&amp; \
+
+# retrieve the archive signature
+~ $ wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - &amp;&amp; \
+
+~ $ apt-get update
+
+# install all key llvm packages
+~ $ apt-get install -y clang-8 lldb-8 lld-8 libllvm-8-ocaml-dev libllvm8 llvm-8 llvm-8-dev llvm-8-doc llvm-8-examples llvm-8-runtime    clang-8 clang-tools-8 clang-8-doc libclang-common-8-dev libclang-8-dev libclang1-8 clang-format-8 python-clang-8 libc++-8-dev libc++abi-8-dev
+
+# update environment variable with path to newly installed llvm
+~ $ echo PATH=&quot;/usr/lib/llvm-8/bin:${PATH}&quot;
+~ $ echo LD_LIBRARY_PATH=&quot;/usr/lib/llvm-8/lib:${LD_LIBRARY_PATH}&quot;
+</code></pre>
+<ol start="2">
+<li>Configure and build musl (it is a C standard library)</li>
+</ol>
+<pre><code class="language-bash"># create directory for builds
+~ $ mkdir ~/build &amp;&amp; cd build
+
+# clone our special version of musl
+~ $ git clone https://github.com/fluencelabs/musl.git &amp;&amp; cd musl
+
+# configure musl build for wasm32-unknown-unknown-wasm target
+~ $ ./configure CC=clang CFLAGS=&quot;--target=wasm32-unknown-unknown-wasm -O3&quot; --prefix=/sysroot --enable-debug wasm32
+
+# build musl in 8 threads
+~ $ make -C /build/musl -j 8 install CROSS_COMPILE=llvm-
+
+# make a directory for our sysroot
+~ $ mkdir /opt/wasm-sysroot
+
+# copy compiled musl to it
+~ $ cp /src/musl/arch/wasm32/libc.imports /opt/wasm-sysroot/lib/
+</code></pre>
+<ol start="3">
+<li>Build compiler-rt</li>
+</ol>
+<pre><code class="language-bash">~ $ cd ~/build
+git clone https://github.com/llvm-mirror/compiler-rt.git &amp;&amp; cd compiler-rt
+
+# configure compiler-rt with cland for wasm32-unknown-unknown-wasm target
+~ $ CC=clang cmake -DCMAKE_SYSROOT=/sysroot -DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=wasm32-unknown-unknown-wasm -DCMAKE_C_COMPILER_WORKS=1 --target /src/compiler-rt/lib/builtins
+
+# build compiler-rt
+~ $ make
+
+# copy compiler compiler-rt to clang libs
+~ $ cp lib/*/libclang_rt.builtins-*.a /usr/lib/llvm-8/lib/clang/8.0.0/lib/
+</code></pre>
+<p>Finally, we have newly builded sysroot and could compile C/C++ code to Wasm using similar command as for WASI target:</p>
+<pre><code class="language-bash">~ $ clang --sysroot=/opt/wasm-sysroot --target=wasm32-unknown-unknown -o module.wasm -nostartfiles -fvisibility=hidden -Wl,--no-entry,--export=allocate,--export=deallocate,--export=invoke,--allow-undefined -- *.c
+</code></pre>
+<a class="header" href="#creating-a-hello-world-backend-app-for-fluence" id="creating-a-hello-world-backend-app-for-fluence"><h2>Creating a Hello World backend app for Fluence</h2></a>
+<p>For a backend to be compatible with the Fluence network, it should follow aforementioned conventions to let Fluence nodes run your code correctly. To simplify the application process creating, we have developed the С/С++ SDK, dockerfile which includes all build internals, and the template project for C and C++. Let's learn how to use it!</p>
+<a class="header" href="#building-app-written-on-c" id="building-app-written-on-c"><h3>Building app written on C</h3></a>
+<p>The most simplest way of building application on C is using our template project that could be downloaded <a href="https://github.com/fluencelabs/c-template">here</a>. It includes sdk, Makefile and main.c file with <code>invoke</code> function defined. For simplicity С/С++ SDK is distributed as source code files not a binary.</p>
+<p>Let's open main.c in your favorite editor and write some code:</p>
+<pre><code class="language-C++">#include &quot;sdk/allocator.h&quot;
+#include &quot;sdk/logger.h&quot;
+#include &lt;string.h&gt;
+
+const char *const greeting = &quot;Hello world! From &quot;;
+const int RESPONSE_SIZE_BYTES = 4;
+
+char *invoke(const char *str, int length) {
+    const size_t greeting_length = strlen(greeting);
+    const size_t response_length = length + greeting_length;
+
+    char *response = (char *)allocate(response_length + RESPONSE_SIZE_BYTES);
+
+    wasm_log(str, length);
+
+    // (1)
+    for(int i = 0; i &lt; RESPONSE_SIZE_BYTES; ++i) {
+        response[i] = (response_length &gt;&gt; 8*i) &amp; 0xFF;
+    }
+
+    // (2)
+    memcpy(response + RESPONSE_SIZE_BYTES, greeting, greeting_length);
+    memcpy(response + RESPONSE_SIZE_BYTES + greeting_length, str, length);
+
+    return response;
+}
+</code></pre>
+<p>This invoke function receives pointer to some string and its length and append it to <code>Hello world! From</code> string. To return result from the invoke function it needs to prepend it with its length written in little endian. In this example it is done in (1) and then in (2) the rest of result is copying.</p>
+<p>This app could be built either with docker by</p>
+<pre><code class="language-bash">~ $ docker-compose up
+</code></pre>
+<p>or by Makefile</p>
+<pre><code class="language-bash">~ $ make CC=&lt;path_to_clang&gt; SYSROOT=&lt;path_to_sysroot&gt; TARGET_TRIPLE=&lt;path_to_target_triple&gt;
+</code></pre>
+<p>The complete Hello World example written on C could be found <a href="https://github.com/fluencelabs/tutorials/tree/master/hello-world/app-logger-c">here</a>.</p>
+<a class="header" href="#building-app-written-on-c-1" id="building-app-written-on-c-1"><h3>Building app written on C++</h3></a>
+<p>С++ application could be created in a similar ways as a C by using this <a href="https://github.com/fluencelabs/cpp-template">template</a>.</p>
+<p>Let's open main.cpp in your favorite editor and write some code:</p>
+<pre><code class="language-C++">#include &quot;sdk/sdk.h&quot;
+#include &lt;string.h&gt;
+
+const std::string greeting = &quot;Hello world! From &quot;;
+
+extern &quot;C&quot; char *invoke(char *str, int length) {
+    const std::string request = sdk::read_request&lt;std::string&gt;(str, length);
+    const std::string response = greeting + request;
+
+    sdk::wasm_log(response);
+
+    return sdk::write_response(response);
+}
+</code></pre>
+<p>In this example, we have some excess allocation (while transforming a raw supplied string to std::string and while appending two strings) and to reduce this overhead scheme from C application could be used.</p>
+<p>The complete Hello World example written on C++ could be found <a href="https://github.com/fluencelabs/tutorials/tree/master/hello-world/app-logger-cpp">here</a>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../backend/rust/best_practices.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../backend/c_cpp/sdk.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="../../backend/rust/best_practices.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="../../backend/c_cpp/sdk.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+        <!-- Google Analytics Tag -->
+        <script type="text/javascript">
+            var localAddrs = ["localhost", "127.0.0.1", ""];
+
+            // make sure we don't activate google analytics if the developer is
+            // inspecting the book locally...
+            if (localAddrs.indexOf(document.location.hostname) === -1) {
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+                ga('create', 'UA-120211353-6', 'auto');
+                ga('send', 'pageview');
+            }
+        </script>
+        
+
+        
+        <script src="../../ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../editor.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mode-rust.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../theme-dawn.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../theme-tomorrow_night.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
