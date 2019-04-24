@@ -144,7 +144,7 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="#backend-cc-sdk-overview" id="backend-cc-sdk-overview"><h1>Backend C/C++ SDK overview</h1></a>
-<a class="header" href="#compilation-cc-to-webassebly" id="compilation-cc-to-webassebly"><h2>Compilation C/C++ to Webassebly</h2></a>
+<a class="header" href="#compilation-cc-to-webassembly" id="compilation-cc-to-webassembly"><h2>Compilation C/C++ to Webassembly</h2></a>
 <p>There are two main requirements for provided Webassembly modules:</p>
 <ul>
 <li>they must have three export functions: <code>allocate</code>, <code>deallocate</code>, <code>invoke</code></li>
@@ -153,10 +153,10 @@
 <p>You can find more detailed info about requirements in <a href="../internals.html">internals</a> section of this guide. But compilation of C/C++ to Webassembly often generates modules with several syscall imports. We have tried to simplify the compilation process for C/C++ as much as possible.</p>
 <p>There are few possible ways of compilation of C/C++ code to Webassembly, and two of them are most suitable for our platform:</p>
 <ul>
-<li>by wasm32-unknwon-wasi target</li>
+<li>by wasm32-unknown-wasi target</li>
 <li>by wasm32-unknown-unknown target</li>
 </ul>
-<a class="header" href="#wasm32-unknwon-wasi" id="wasm32-unknwon-wasi"><h3>wasm32-unknwon-wasi</h3></a>
+<a class="header" href="#wasm32-unknown-wasi" id="wasm32-unknown-wasi"><h3>wasm32-unknown-wasi</h3></a>
 <p>Compilation with WASI-sysroot is quite simple:</p>
 <ol>
 <li>
@@ -169,8 +169,8 @@
 <pre><code class="language-bash">~ $ clang --sysroot=/opt/wasi-sdk/ --target=wasm32-unknown-wasi -o module.wasm -nostartfiles -fvisibility=hidden -Wl,--no-entry,--export=allocate,--export=deallocate,--export=invoke,--allow-undefined -- *.c
 </code></pre>
 <p>There <code>--export</code> directives for linker manage it to make three functions exported from module and <code>--allow-undefined</code> used to make it possible to import <code>write</code> and <code>flush</code> functions.</p>
-<a class="header" href="#wasm32-unknwon-unknown" id="wasm32-unknwon-unknown"><h3>wasm32-unknwon-unknown</h3></a>
-<p>Compilation for wasm32-unknwon-unknown is more complicated and suggests building sysroot first:</p>
+<a class="header" href="#wasm32-unknown-unknown" id="wasm32-unknown-unknown"><h3>wasm32-unknown-unknown</h3></a>
+<p>Compilation for wasm32-unknown-unknown is more complicated and suggests building sysroot first:</p>
 <ol>
 <li>First of all it needs to install the latest stable llvm 8.x that supports Webassembly. On Ubuntu it could be done by following commands (more detailed overview of llvm installation could be found <a href="http://apt.llvm.org">here</a>):</li>
 </ol>
