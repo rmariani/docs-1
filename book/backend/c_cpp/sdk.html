@@ -286,8 +286,9 @@ extern &quot;C&quot; char *invoke(char *str, int length) {
     return sdk::write_response(response);
 }
 </code></pre>
-<p>In this example, we have some excess allocation (while transforming a raw supplied string to std::string and while appending two strings) and to reduce this overhead scheme from C application could be used.</p>
+<p>In this example, there are some excess allocations (while transforming a raw supplied string to std::string and while appending two strings) - scheme with raw C strings from C application could be used to reduce this overhead.</p>
 <p>The complete Hello World example written on C++ could be found <a href="https://github.com/fluencelabs/tutorials/tree/master/hello-world/app-logger-cpp">here</a>.</p>
+<p>Please also note that there is no support of exceptions now so to compile C++ <code>-fno-exception</code> option should be used.</p>
 
                     </main>
 
