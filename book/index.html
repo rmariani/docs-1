@@ -1,77 +1,60 @@
-<!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js">
-    <head>
-        <!-- Book generated using mdBook -->
-        <meta charset="UTF-8">
-        <title>Introduction - The Fluence book</title>
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+                    </div>
+                </div>
 
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
 
-        <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="#introduction" id="introduction"><h1>Introduction</h1></a>
+<a class="header" href="#what-is-fluence" id="what-is-fluence"><h2>What is Fluence?</h2></a>
+<p>Fluence is an efficient trustless computation platform that can match traditional cloud computing platforms in terms request-processing latency and cost efficiency. To run computations, Fluence uses a WebAssembly virtual machine, which allows deployment into decentralized an environment featuring applications written in various programming languages.</p>
+<a class="header" href="#what-can-be-built-with-fluence" id="what-can-be-built-with-fluence"><h2>What can be built with Fluence?</h2></a>
+<p>Fluence can be used as a general-purpose backend engine for decentralized applications. Because of its cost efficiency, developers generally do not have to worry much about low-level code optimization. Existing software packages can be ported to Fluence as-is, once they are compiled into WebAssembly.</p>
+<a class="header" href="#decentralized-databases" id="decentralized-databases"><h4>Decentralized databases</h4></a>
+<p>As an <a href="https://github.com/fluencelabs/tutorials/tree/master/llamadb">example</a>, we have ported an existing toy SQL database <a href="https://github.com/nukep/llamadb">LlamaDB</a> to run in the decentralized environment by making just a few modifications and compiling it into WebAssembly.</p>
+<p>We don't expect it to be very difficult to port an existing database, such as one using SQLite or RocksDB, to Fluence. Once deployed, this database could serve frontends of user-facing decentralized applications.</p>
+<p>This, coupled with decentralized storage systems, such as IPFS or Swarm, could enable fully decentralized applications. Such applications would use a decentralized storage to store static data, and a decentralized database running on top of Fluence – to serve dynamic client requests.</p>
+<a class="header" href="#gambling-applications" id="gambling-applications"><h4>Gambling applications</h4></a>
+<p>Simple dice games or roulette can be ported to Fluence fairly easily. However, at the current moment Fluence is not able to run by itself <a href="https://en.wikipedia.org/wiki/Perfect_information">imperfect information games</a> such as Texas Holdem poker or Guess the Number. The reason is that full game state can be read by nodes running the backend, and Fluence does not have privacy-preserving computations built in into its SDK.</p>
+<p>We expect, however, that approaches such as <a href="https://ethereum.stackexchange.com/questions/376/what-are-effective-and-secure-ways-of-shuffling-a-deck-of-cards-in-a-contract/758">decentralized card deck shuffling</a> can be employed to port certain imperfect information games to the Fluence network. In the meanwhile we have prepared a <em><a href="https://github.com/fluencelabs/tutorials/tree/master/guessing-game">broken implementation</a></em> of Guess the Number game ;)</p>
+<a class="header" href="#games" id="games"><h4>Games</h4></a>
+<p>Perfect-information games can be easily built on top of Fluence. Think of chess, Go, rock–paper–scissors, games similar to Dungeons and Dragons, or roll-and-move board games. We have prepared a <a href="https://github.com/fluencelabs/tutorials/tree/master/tic-tac-toe">tic-tac-toe</a> example to play with. Collectible decentralized applications can be launched on Fluence as well.</p>
+<a class="header" href="#how-does-fluence-work" id="how-does-fluence-work"><h2>How does Fluence work?</h2></a>
+<p>In order to reach low latency and high throughput, Fluence splits network nodes into two layers: the <em>real-time processing layer</em> and the <em>batch validation layer</em>.</p>
+<p>The real-time processing layer is able to promptly serve client requests, but provides only moderate security guarantees that returned responses are correct. Later, the batch validation layer additionally verifies returned responses, and if it is found that some of the responses were incorrect, offending real-time nodes lose their deposits.</p>
+<p>In this section we provide brief Fluence overview and discuss reasons to have delayed verification. We also consider Fluence basic incentive model.</p>
+<a class="header" href="#links" id="links"><h2>Links</h2></a>
+<ul>
+<li><a href="http://fluence.network/">Fluence Labs site</a></li>
+<li><a href="https://discordapp.com/invite/AjfbDKQ">Discord</a></li>
+<li><a href="https://github.com/fluencelabs/fluence">Github</a></li>
+<li><a href="https://github.com/fluencelabs/tutorials/">Tutorials</a></li>
+</ul>
 
-        <!-- Custom theme stylesheets -->
-        
+                    </main>
 
-        
-        <!-- MathJax -->
-        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        
-    </head>
-    <body class="light">
-        <!-- Provide site root to javascript -->
-        <script type="text/javascript">
-            var path_to_root = "";
-            var default_theme = "light";
-        </script>
-
-        <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
-            try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
-
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-
-        <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
-            var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
-            if (theme === null || theme === undefined) { theme = default_theme; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme + ' js';
-        </script>
-
-        <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
-            if (document.body.clientWidth >= 1080) {
-                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
-                sidebar = sidebar || 'visible';
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -145,9 +128,9 @@
                     <main>
                         <a class="header" href="#introduction" id="introduction"><h1>Introduction</h1></a>
 <a class="header" href="#what-is-fluence" id="what-is-fluence"><h2>What is Fluence?</h2></a>
-<p>Fluence is an efficient trustless computation platform that allows to achieve few seconds request processing latency and cost efficiency similar to traditional cloud computing. To run computations, Fluence uses a WebAssembly virtual machine, which allows to deploy into the decentralized environment applications written in multiple programming languages.</p>
+<p>Fluence is an efficient trustless computation platform that can match traditional cloud computing platforms in terms request-processing latency and cost efficiency. To run computations, Fluence uses a WebAssembly virtual machine, which allows deployment into decentralized an environment featuring applications written in various programming languages.</p>
 <a class="header" href="#what-can-be-built-with-fluence" id="what-can-be-built-with-fluence"><h2>What can be built with Fluence?</h2></a>
-<p>Fluence can be used as a general purpose backend engine for decentralized applications. Because of its cost efficiency, developers generally do not have to worry much about low-level code optimization. Existing software packages can be ported to Fluence as is, once they are compiled into WebAssembly.</p>
+<p>Fluence can be used as a general-purpose backend engine for decentralized applications. Because of its cost efficiency, developers generally do not have to worry much about low-level code optimization. Existing software packages can be ported to Fluence as is, once they are compiled into WebAssembly.</p>
 <a class="header" href="#decentralized-databases" id="decentralized-databases"><h4>Decentralized databases</h4></a>
 <p>As an <a href="https://github.com/fluencelabs/tutorials/tree/master/llamadb">example</a>, we have ported an existing toy SQL database <a href="https://github.com/nukep/llamadb">LlamaDB</a> to run in the decentralized environment by making just a few modifications and compiling it into WebAssembly.</p>
 <p>We expect it should not be extremely difficult to port an existing database such as SQLite or RocksDB to Fluence. Deployed, this database could serve frontends of user-facing decentralized applications.</p>
@@ -156,7 +139,7 @@
 <p>Simple dice games or roulette can be ported to Fluence fairly easily. However, at the current moment Fluence is not able to run by itself <a href="https://en.wikipedia.org/wiki/Perfect_information">imperfect information games</a> such as Texas Holdem poker or Guess the Number. The reason is that full game state can be read by nodes running the backend, and Fluence does not have privacy-preserving computations built in into its SDK.</p>
 <p>We expect, however, that approaches such as <a href="https://ethereum.stackexchange.com/questions/376/what-are-effective-and-secure-ways-of-shuffling-a-deck-of-cards-in-a-contract/758">decentralized card deck shuffling</a> can be employed to port certain imperfect information games to the Fluence network. In the meanwhile we have prepared a <em><a href="https://github.com/fluencelabs/tutorials/tree/master/guessing-game">broken implementation</a></em> of Guess the Number game ;)</p>
 <a class="header" href="#games" id="games"><h4>Games</h4></a>
-<p>Perfect information games can be easily built on top of Fluence. Think of chess, Go, rock–paper–scissors, games similar to Dungeons and Dragons, or roll-and-move board games. We have prepared a <a href="https://github.com/fluencelabs/tutorials/tree/master/tic-tac-toe">tic-tac-toe</a> example to play with. Collectible decentralized applications can be launched on Fluence as well.</p>
+<p>Perfect-information games can be easily built on top of Fluence. Think of chess, Go, rock–paper–scissors, games similar to Dungeons and Dragons, or roll-and-move board games. We have prepared a <a href="https://github.com/fluencelabs/tutorials/tree/master/tic-tac-toe">tic-tac-toe</a> example to play with. Collectible decentralized applications can be launched on Fluence as well.</p>
 <a class="header" href="#how-does-fluence-work" id="how-does-fluence-work"><h2>How does Fluence work?</h2></a>
 <p>In order to reach low latency and high throughput, Fluence splits network nodes into two layers: the <em>real-time processing layer</em> and the <em>batch validation layer</em>.</p>
 <p>The real-time processing layer is able to promptly serve client requests, but provides only moderate security guarantees that returned responses are correct. Later, the batch validation layer additionally verifies returned responses, and if it is found that some of the responses were incorrect, offending real-time nodes lose their deposits.</p>
